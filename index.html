@@ -23,7 +23,7 @@
         const { useState, useEffect } = React;
 
         // ==========================================
-        // 🔧 設定區域 (已更新為你的最新 Link)
+        // 🔧 設定區域 (已更新為最新 Link)
         // ==========================================
         const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSemKuLmfrqvXLTqQT2bK7mScp04kQ5AOfLUDKnZsNyLUDrRhA/formResponse";
         const IDS = {
@@ -68,59 +68,27 @@
 
         const CATEGORIES = [...new Set(PRODUCTS.map(p => p.category))];
 
-        // --- 產品卡片組件 ---
         function ProductCard({ product, onAdd }) {
             const [customSize, setCustomSize] = useState('');
-
             const handleCustomAdd = () => {
-                if (customSize.trim()) {
-                    onAdd(product, customSize.trim());
-                    setCustomSize(''); 
-                }
+                if (customSize.trim()) { onAdd(product, customSize.trim()); setCustomSize(''); }
             };
-
             return (
                 <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
                     <div className="p-4 flex items-center gap-4 bg-slate-50 border-b border-slate-100">
-                        <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-2xl text-slate-700 shadow-sm border border-slate-100">
-                            <i className={`fas ${product.icon}`}></i>
-                        </div>
-                        <div>
-                            <h3 className="text-lg font-bold text-slate-800">{product.name}</h3>
-                            <p className="text-sm text-slate-500">{product.desc}</p>
-                        </div>
+                        <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-2xl text-slate-700 shadow-sm border border-slate-100"><i className={`fas ${product.icon}`}></i></div>
+                        <div><h3 className="text-lg font-bold text-slate-800">{product.name}</h3><p className="text-sm text-slate-500">{product.desc}</p></div>
                     </div>
                     <div className="p-4">
                         <div className="flex flex-wrap gap-2 mb-3">
                             {product.sizes.map(size => (
-                                <button 
-                                    key={size} 
-                                    onClick={() => onAdd(product, size)} 
-                                    className="px-4 py-2.5 bg-white border border-slate-200 rounded-lg text-lg font-bold text-slate-600 active:bg-red-600 active:text-white active:border-red-600 transition-colors btn-press flex-grow text-center min-w-[3rem]"
-                                >
-                                    {size}
-                                </button>
+                                <button key={size} onClick={() => onAdd(product, size)} className="px-4 py-2.5 bg-white border border-slate-200 rounded-lg text-lg font-bold text-slate-600 active:bg-red-600 active:text-white active:border-red-600 transition-colors btn-press flex-grow text-center min-w-[3rem]">{size}</button>
                             ))}
                         </div>
                         <div className="relative flex items-center mt-2">
-                            <div className="absolute left-3 text-slate-400">
-                                <i className="fas fa-pen"></i>
-                            </div>
-                            <input 
-                                type="text"
-                                value={customSize}
-                                onChange={(e) => setCustomSize(e.target.value)}
-                                placeholder="輸入其他尺碼..."
-                                className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 pl-10 pr-20 text-base outline-none focus:border-red-500 transition-colors"
-                            />
-                            {customSize && (
-                                <button 
-                                    onClick={handleCustomAdd}
-                                    className="absolute right-1 top-1 bottom-1 bg-red-600 text-white px-4 rounded-md text-sm font-bold shadow-sm btn-press"
-                                >
-                                    加入
-                                </button>
-                            )}
+                            <div className="absolute left-3 text-slate-400"><i className="fas fa-pen"></i></div>
+                            <input type="text" value={customSize} onChange={(e) => setCustomSize(e.target.value)} placeholder="輸入其他尺碼..." className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 pl-10 pr-20 text-base outline-none focus:border-red-500 transition-colors" />
+                            {customSize && <button onClick={handleCustomAdd} className="absolute right-1 top-1 bottom-1 bg-red-600 text-white px-4 rounded-md text-sm font-bold shadow-sm btn-press">加入</button>}
                         </div>
                     </div>
                 </div>
@@ -133,6 +101,7 @@
             const [userInfo, setUserInfo] = useState('');
             const [isSubmitting, setIsSubmitting] = useState(false);
             const [activeCategory, setActiveCategory] = useState('鞋類');
+            const [progress, setProgress] = useState({ current: 0, total: 0 });
 
             useEffect(() => {
                 const saved = localStorage.getItem('c_team_user_name');
@@ -140,178 +109,114 @@
             }, []);
 
             const addToCart = (product, size) => {
-                const newItem = {
-                    cartId: Date.now(),
-                    name: product.name,
-                    size: size,
-                    icon: product.icon
-                };
-                setCart(prev => [...prev, newItem]);
+                setCart(prev => [...prev, { cartId: Date.now(), name: product.name, size: size, icon: product.icon }]);
                 if (navigator.vibrate) navigator.vibrate(50);
             };
+            const removeFromCart = (id) => setCart(cart.filter(c => c.cartId !== id));
 
-            const removeFromCart = (cartId) => {
-                setCart(cart.filter(item => item.cartId !== cartId));
-            };
-
+            // --- 穩定傳送邏輯 (逐個傳 + 延遲) ---
             const handleSubmit = async () => {
                 if (!userInfo || cart.length === 0) return;
                 setIsSubmitting(true);
+                setProgress({ current: 0, total: cart.length });
 
-                try {
-                    const promises = cart.map(item => {
+                for (let i = 0; i < cart.length; i++) {
+                    const item = cart[i];
+                    try {
                         const formData = new FormData();
                         formData.append(IDS.NAME, userInfo);
                         formData.append(IDS.ITEM, item.name);
                         formData.append(IDS.SIZE, item.size);
-                        return fetch(FORM_URL, { method: 'POST', body: formData, mode: 'no-cors' });
-                    });
-
-                    await Promise.all(promises);
-
-                    setTimeout(() => {
-                        setIsSubmitting(false);
-                        setCart([]);
-                        localStorage.setItem('c_team_user_name', userInfo);
-                        setView('success');
-                    }, 1500);
-
-                } catch (error) {
-                    alert("傳送失敗，請檢查網絡連接。");
-                    setIsSubmitting(false);
+                        
+                        // 發送請求
+                        await fetch(FORM_URL, { method: 'POST', body: formData, mode: 'no-cors' });
+                        
+                        // 更新進度
+                        setProgress({ current: i + 1, total: cart.length });
+                        
+                        // 等待 1 秒 (避免 Google Block)
+                        await new Promise(r => setTimeout(r, 1000));
+                        
+                    } catch (e) {
+                        console.error("Error", e);
+                    }
                 }
+
+                setIsSubmitting(false);
+                setCart([]);
+                localStorage.setItem('c_team_user_name', userInfo);
+                setView('success');
             };
 
-            // --- 成功畫面 ---
             if (view === 'success') {
                 return (
                     <div className="min-h-screen bg-green-50 flex flex-col items-center justify-center p-6 text-center">
-                        <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-6 shadow-lg animate-bounce">
-                            <i className="fas fa-check text-green-600 text-5xl"></i>
-                        </div>
+                        <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-6 shadow-lg animate-bounce"><i className="fas fa-check text-green-600 text-5xl"></i></div>
                         <h1 className="text-3xl font-bold text-slate-800 mb-2">搞掂！</h1>
-                        <p className="text-lg text-slate-600 mb-10 font-medium">
-                            <span className="text-green-700 font-bold text-xl">{userInfo}</span> 師兄<br/>
-                            你嘅制服已經報咗名。
-                        </p>
-                        <button onClick={() => setView('home')} className="w-full py-4 bg-white border-2 border-green-600 text-green-700 font-bold rounded-xl text-lg shadow-md btn-press">
-                            幫另一位師兄報名
-                        </button>
+                        <p className="text-lg text-slate-600 mb-10 font-medium"><span className="text-green-700 font-bold text-xl">{userInfo}</span> 師兄<br/>你嘅制服已經報咗名。</p>
+                        <button onClick={() => setView('home')} className="w-full py-4 bg-white border-2 border-green-600 text-green-700 font-bold rounded-xl text-lg shadow-md btn-press">幫另一位師兄報名</button>
                     </div>
                 );
             }
 
-            // --- 結帳畫面 ---
             if (view === 'checkout') {
                 return (
                     <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
                         <div className="bg-red-700 text-white p-4 pt-4 pb-4 shadow-md flex items-center gap-4 sticky top-0 z-10">
-                            <button onClick={() => setView('home')} className="px-4 py-2 bg-red-800 rounded-lg text-lg font-bold btn-press">
-                                <i className="fas fa-arrow-left mr-2"></i>返回
-                            </button>
+                            <button onClick={() => setView('home')} className="px-4 py-2 bg-red-800 rounded-lg text-lg font-bold btn-press"><i className="fas fa-arrow-left mr-2"></i>返回</button>
                             <h1 className="text-xl font-bold">核對資料</h1>
                         </div>
-
                         <div className="flex-1 p-4 overflow-y-auto pb-32">
                             <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-6">
                                 <h2 className="text-sm font-bold text-slate-400 uppercase tracking-wide mb-4 border-b border-slate-100 pb-2">已選制服 ({cart.length})</h2>
-                                {cart.length === 0 ? (
-                                    <div className="text-center text-slate-400 py-4">未揀任何嘢</div>
-                                ) : (
-                                    cart.map(item => (
-                                        <div key={item.cartId} className="flex justify-between items-center py-4 border-b border-slate-100 last:border-0">
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-xl text-slate-600">
-                                                    <i className={`fas ${item.icon}`}></i>
-                                                </div>
-                                                <div>
-                                                    <div className="text-lg font-bold text-slate-800">{item.name}</div>
-                                                    <div className="text-base text-slate-500">尺碼: <span className="font-bold text-red-600 bg-red-50 px-2 rounded">{item.size}</span></div>
-                                                </div>
-                                            </div>
-                                            <button onClick={() => removeFromCart(item.cartId)} className="w-10 h-10 flex items-center justify-center text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors btn-press">
-                                                <i className="fas fa-trash-alt"></i>
-                                            </button>
+                                {cart.length === 0 ? <div className="text-center text-slate-400 py-4">未揀任何嘢</div> : cart.map(item => (
+                                    <div key={item.cartId} className="flex justify-between items-center py-4 border-b border-slate-100 last:border-0">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-xl text-slate-600"><i className={`fas ${item.icon}`}></i></div>
+                                            <div><div className="text-lg font-bold text-slate-800">{item.name}</div><div className="text-base text-slate-500">尺碼: <span className="font-bold text-red-600 bg-red-50 px-2 rounded">{item.size}</span></div></div>
                                         </div>
-                                    ))
-                                )}
+                                        <button onClick={() => removeFromCart(item.cartId)} className="w-10 h-10 flex items-center justify-center text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors btn-press"><i className="fas fa-trash-alt"></i></button>
+                                    </div>
+                                ))}
                             </div>
-
                             <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-                                <label className="block text-lg font-bold text-slate-800 mb-3 flex items-center gap-2">
-                                    <i className="fas fa-user-edit text-red-600"></i> 輸入姓名 / UI：
-                                </label>
-                                <input 
-                                    type="text" 
-                                    value={userInfo} 
-                                    onChange={e => setUserInfo(e.target.value)} 
-                                    placeholder="例如: 12345 陳大文" 
-                                    className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl p-4 text-xl font-bold outline-none focus:border-red-600 focus:bg-white transition-colors" 
-                                />
-                                <p className="text-slate-400 mt-2 text-sm">※ 請填寫清楚以作識別。</p>
+                                <label className="block text-lg font-bold text-slate-800 mb-3 flex items-center gap-2"><i className="fas fa-user-edit text-red-600"></i> 輸入姓名 / UI：</label>
+                                <input type="text" value={userInfo} onChange={e => setUserInfo(e.target.value)} placeholder="例如: 12345 陳大文" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl p-4 text-xl font-bold outline-none focus:border-red-600 focus:bg-white transition-colors" />
                             </div>
                         </div>
-
                         <div className="p-4 bg-white border-t border-slate-200 fixed bottom-0 left-0 right-0 z-20 safe-area-bottom">
-                            <button 
-                                onClick={handleSubmit} 
-                                disabled={isSubmitting || !userInfo || cart.length === 0} 
-                                className={`w-full py-4 rounded-xl text-xl font-bold text-white shadow-lg btn-press flex items-center justify-center gap-3 ${isSubmitting || !userInfo || cart.length === 0 ? 'bg-slate-300' : 'bg-red-600'}`}
-                            >
-                                {isSubmitting ? <><i className="fas fa-spinner fa-spin"></i> 傳送中...</> : <><i className="fas fa-paper-plane"></i> 確認傳送</>}
+                            <button onClick={handleSubmit} disabled={isSubmitting || !userInfo || cart.length === 0} className={`w-full py-4 rounded-xl text-xl font-bold text-white shadow-lg btn-press flex items-center justify-center gap-3 ${isSubmitting || !userInfo || cart.length === 0 ? 'bg-slate-300' : 'bg-red-600'}`}>
+                                {isSubmitting ? <><i className="fas fa-spinner fa-spin"></i> 正在傳送 ({progress.current}/{progress.total})...</> : <><i className="fas fa-paper-plane"></i> 確認傳送</>}
                             </button>
                         </div>
                     </div>
                 );
             }
 
-            // --- 主頁 ---
             return (
                 <div className="min-h-screen bg-slate-100 pb-32 font-sans">
                     <header className="bg-red-700 text-white pt-6 pb-4 px-4 shadow-lg sticky top-0 z-20">
                         <div className="flex justify-between items-center mb-4">
-                            <div>
-                                <h1 className="text-2xl font-extrabold tracking-tight">灣仔消防局 <span className="text-sm bg-white text-red-700 px-2 py-0.5 rounded ml-2 align-middle">C 隊專屬</span></h1>
-                            </div>
+                            <div><h1 className="text-2xl font-extrabold tracking-tight">灣仔消防局 <span className="text-sm bg-white text-red-700 px-2 py-0.5 rounded ml-2 align-middle">C 隊專屬</span></h1></div>
                             <div className="relative" onClick={() => cart.length > 0 && setView('checkout')}>
                                 <i className="fas fa-shopping-cart text-2xl"></i>
                                 {cart.length > 0 && <span className="absolute -top-2 -right-2 bg-yellow-400 text-red-800 text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-red-700">{cart.length}</span>}
                             </div>
                         </div>
-
-                        {/* 分類導航 */}
                         <div className="flex gap-2 overflow-x-auto pb-1 category-scroll scroll-hide">
                             {CATEGORIES.map(cat => (
-                                <button 
-                                    key={cat}
-                                    onClick={() => setActiveCategory(cat)}
-                                    className={`whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold transition-all ${activeCategory === cat ? 'bg-white text-red-700 shadow-md' : 'bg-red-800 text-red-200'}`}
-                                >
-                                    {cat}
-                                </button>
+                                <button key={cat} onClick={() => setActiveCategory(cat)} className={`whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold transition-all ${activeCategory === cat ? 'bg-white text-red-700 shadow-md' : 'bg-red-800 text-red-200'}`}>{cat}</button>
                             ))}
                         </div>
                     </header>
-
                     <main className="px-4 py-4 space-y-4">
-                        {PRODUCTS.filter(p => p.category === activeCategory).map(product => (
-                            <ProductCard key={product.id} product={product} onAdd={addToCart} />
-                        ))}
+                        {PRODUCTS.filter(p => p.category === activeCategory).map(product => (<ProductCard key={product.id} product={product} onAdd={addToCart} />))}
                     </main>
-
                     {cart.length > 0 && (
                         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-4 shadow-[0_-5px_20px_rgba(0,0,0,0.1)] z-30 safe-area-bottom">
                             <div className="flex items-center gap-4">
-                                <div className="flex-1 pl-2">
-                                    <div className="text-xs text-slate-500 font-bold uppercase">已揀選</div>
-                                    <div className="text-2xl font-bold text-red-600">{cart.length} <span className="text-sm text-slate-800 font-medium">件</span></div>
-                                </div>
-                                <button 
-                                    onClick={() => setView('checkout')} 
-                                    className="bg-red-600 text-white text-lg font-bold px-6 py-3 rounded-xl shadow-lg btn-press flex items-center gap-2"
-                                >
-                                    去填名 <i className="fas fa-arrow-right"></i>
-                                </button>
+                                <div className="flex-1 pl-2"><div className="text-xs text-slate-500 font-bold uppercase">已揀選</div><div className="text-2xl font-bold text-red-600">{cart.length} <span className="text-sm text-slate-800 font-medium">件</span></div></div>
+                                <button onClick={() => setView('checkout')} className="bg-red-600 text-white text-lg font-bold px-6 py-3 rounded-xl shadow-lg btn-press flex items-center gap-2">去填名 <i className="fas fa-arrow-right"></i></button>
                             </div>
                         </div>
                     )}
