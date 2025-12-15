@@ -8,87 +8,147 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
-        .btn-press:active { transform: scale(0.95); transition: transform 0.1s; }
-        .scroll-hide::-webkit-scrollbar { display: none; }
-        .category-scroll { -webkit-overflow-scrolling: touch; }
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap');
+        body { font-family: 'Noto Sans TC', sans-serif; -webkit-tap-highlight-color: transparent; background-color: #f8fafc; }
+        .btn-press:active { transform: scale(0.96); }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .wanchai-gradient { background: linear-gradient(135deg, #991b1b 0%, #7f1d1d 100%); }
     </style>
 </head>
-<body class="bg-slate-50">
+<body>
     <div id="root"></div>
 
     <script type="text/babel">
         const { useState, useEffect } = React;
 
         // ==========================================
-        // 🔧 設定區域 (已更新為最新 Link)
+        // 🔧 設定區域
         // ==========================================
         const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSemKuLmfrqvXLTqQT2bK7mScp04kQ5AOfLUDKnZsNyLUDrRhA/formResponse";
         const IDS = {
-            NAME: "entry.1386941444",   // 姓名UI
-            ITEM: "entry.1748307909",   // 制服款式
-            SIZE: "entry.584139612"     // 尺碼
+            NAME: "entry.1386941444",
+            ITEM: "entry.1748307909",
+            SIZE: "entry.584139612"
         };
 
-        // ==========================================
-        // 🚒 制服清單
-        // ==========================================
         const PRODUCTS = [
             // --- 鞋類 ---
-            { category: '鞋類', id: '208', name: '跑步鞋 (Item 208)', desc: 'Shoe Running', icon: 'fa-running', sizes: ['7', '7.5', '8', '8.5', '9', '9.5', '10'] },
+            { category: '鞋類', id: '208', name: '跑步鞋 (Item 208)', desc: 'Shoe Running', icon: 'fa-person-running', sizes: ['7', '7.5', '8', '8.5', '9', '9.5', '10'] },
             { category: '鞋類', id: '207', name: '白帆布鞋 (Item 207)', desc: 'White Canvas', icon: 'fa-shoe-prints', sizes: ['40', '41', '42', '43', '44'] },
             { category: '鞋類', id: '216', name: '黑皮鞋 (Item 216)', desc: 'Black Rubber O/R', icon: 'fa-shoe-prints', sizes: ['8.5', '9', '9.5'] },
-            { category: '鞋類', id: '32', name: '安全踝足鞋 (Item 32)', desc: 'Safety Ankle', icon: 'fa-boot', sizes: ['7', '7.5', '8', '8.5', '9', '9.5', '10'] },
-            { category: '鞋類', id: '7', name: '消防膠靴 (Item 7)', desc: 'Firetred', icon: 'fa-boot', sizes: ['7', '8', '9', '10', '11'] },
+            { category: '鞋類', id: '32', name: '安全踝足鞋 (Item 32)', desc: 'Safety Ankle', icon: 'fa-shield-cat', sizes: ['7', '7.5', '8', '8.5', '9', '9.5', '10'] },
+            { category: '鞋類', id: '7', name: '消防膠靴 (Item 7)', desc: 'Firetred', icon: 'fa-shoe-prints', sizes: ['7', '8', '9', '10', '11'] },
 
             // --- 上身 ---
-            { category: '上身', id: '256', name: '工作汗衣 (Item 256)', desc: 'Working T-shirt', icon: 'fa-tshirt', sizes: ['38/S', '40/M', '42/L', '44/XL', '46/XXL', '48/XXXL'] },
-            { category: '上身', id: '215', name: '三級藍長袖恤衫 (Item 215)', desc: 'Officer & O/R', icon: 'fa-shirt', sizes: ['15/32', '15/33', '15/34', '15.5/34', '16/34', '16.5/34', '17/34'] },
-            { category: '上身', id: '220', name: '三級藍短袖恤衫 (Item 220)', desc: 'S/S for O/R', icon: 'fa-shirt', sizes: ['15.5/40', '15.5/42', '16/40', '16/42', '16.5/42', '16/44'] },
+            { category: '上身', id: '256', name: '工作汗衣 (Item 256)', desc: 'Working T-shirt', icon: 'fa-shirt', sizes: ['38/S', '40/M', '42/L', '44/XL', '46/XXL', '48/XXXL'] },
+            { category: '上身', id: '215', name: '三級藍長袖恤衫', desc: 'Item 215 (Officer/OR)', icon: 'fa-user-tie', sizes: ['15/32', '15/33', '15/34', '15.5/34', '16/34', '16.5/34', '17/34'] },
+            { category: '上身', id: '220', name: '三級藍短袖恤衫', desc: 'Item 220 (S/S for O/R)', icon: 'fa-user-tie', sizes: ['15.5/40', '15.5/42', '16/40', '16/42', '16.5/42', '16/44'] },
             
             // --- 下身 ---
-            { category: '下身', id: '258', name: '藍斜長褲 (Item 258)', desc: 'Trousers Blue', icon: 'fa-user', sizes: ['30/42', '32/40', '32/41', '32/42', '34/40', '34/41', '34/42', '36/41', '36/42', '38/41', '38/42'] },
-            { category: '下身', id: '247', name: '運動短褲 (Item 247)', desc: 'Shorts Blue P.T.', icon: 'fa-shorts', sizes: ['L', 'XL', 'XXL', 'XXXL'] },
+            { category: '下身', id: '258', name: '藍斜長褲 (Item 258)', desc: 'Trousers Blue', icon: 'fa-person', sizes: ['30/42', '32/40', '32/41', '32/42', '34/40', '34/41', '34/42', '36/41', '36/42', '38/41', '38/42'] },
+            { category: '下身', id: '247', name: '運動短褲 (Item 247)', desc: 'Shorts Blue P.T.', icon: 'fa-person-walking', sizes: ['L', 'XL', 'XXL', 'XXXL'] },
 
             // --- 運動服 ---
             { category: '運動服', id: '275', name: '運動背心 (Item 275)', desc: 'Vest Blue P.T.', icon: 'fa-vest', sizes: ['40', '42', '44', '46', '48'] },
             { category: '運動服', id: '245', name: '長袖運動衫 (Item 245)', desc: 'Shirt P.T. Winter', icon: 'fa-tshirt', sizes: ['42', '44', '46', '48', '50'] },
 
             // --- 配件/裝備 ---
-            { category: '配件', id: '28', name: '個人裝備袋 [藍色]', desc: 'Item 28', icon: 'fa-shopping-bag', sizes: ['一個'] },
+            { category: '配件', id: '28', name: '個人裝備袋 [藍色]', desc: 'Item 28', icon: 'fa-bag-shopping', sizes: ['一個'] },
             { category: '配件', id: '10', name: '綠色工具袋', desc: 'Item 10', icon: 'fa-toolbox', sizes: ['一個'] },
-            { category: '配件', id: '88', name: '布肩章 (藍色)', desc: 'Item 88/183/182/181', icon: 'fa-shield-alt', sizes: ['隊員', '資深隊員', '隊目', '總隊目'] },
-            { category: '配件', id: '180', name: '防水肩章 (黑色)', desc: 'Item 180/186/185/184', icon: 'fa-shield-alt', sizes: ['隊員', '資深隊員', '隊目', '總隊目'] },
-            { category: '配件', id: '30', name: '鴨咀帽 (Item 30)', desc: 'Cap', icon: 'fa-hat-cowboy', sizes: ['M', 'L'] },
-            { category: '配件', id: '57', name: '防爆手套 (Item 57)', desc: 'Fire Retardant', icon: 'fa-mitten', sizes: ['S', 'M', 'L'] },
+            { category: '配件', id: '88', name: '布肩章 (藍色)', desc: 'Fn / Sfn / PFn', icon: 'fa-certificate', sizes: ['隊員', '資深隊員', '隊目', '總隊目'] },
+            { category: '配件', id: '180', name: '防水肩章 (黑色)', desc: 'Fn / Sfn / PFn', icon: 'fa-certificate', sizes: ['隊員', '資深隊員', '隊目', '總隊目'] },
+            { category: '配件', id: '30', name: '鴨咀帽 (Item 30)', desc: 'Cap', icon: 'fa-hat-cowboy-side', sizes: ['M', 'L'] },
+            { category: '配件', id: '57', name: '防爆手套 (Item 57)', desc: 'Fire Retardant', icon: 'fa-hands-holding', sizes: ['S', 'M', 'L'] },
             { category: '配件', id: 'glove_mt', name: '攀山手套', desc: 'Gloves', icon: 'fa-mitten', sizes: ['M', 'L'] }
         ];
 
         const CATEGORIES = [...new Set(PRODUCTS.map(p => p.category))];
 
+        // --- 通告欄組件 ---
+        function InfoBanner() {
+            const currentMonth = new Date().getMonth() + 1;
+            const isOdd = currentMonth % 2 !== 0;
+
+            return (
+                <div className="mx-4 mt-4 mb-2">
+                    <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200 flex flex-col gap-3">
+                        <div className="flex items-center gap-2 mb-1 border-b border-slate-100 pb-2">
+                            <i className="fas fa-bullhorn text-red-600 animate-pulse"></i>
+                            <h3 className="font-bold text-slate-800 text-sm">制服更換安排</h3>
+                            <span className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full ml-auto">
+                                現在是 {currentMonth} 月 ({isOdd ? '單' : '雙'})
+                            </span>
+                        </div>
+                        <div className={`flex items-center gap-3 p-3 rounded-lg border transition-all ${isOdd ? 'bg-red-50 border-red-200 shadow-sm' : 'bg-slate-50 border-transparent opacity-60'}`}>
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${isOdd ? 'bg-red-600 text-white' : 'bg-slate-200 text-slate-500'}`}>單</div>
+                            <div className="flex-1">
+                                <p className={`text-xs font-bold mb-0.5 ${isOdd ? 'text-red-800' : 'text-slate-600'}`}>單數月份 (1, 3, 5...)</p>
+                                <p className="text-xs text-slate-500">👉 上網報制服</p>
+                            </div>
+                            {isOdd && <i className="fas fa-check-circle text-green-500 text-lg"></i>}
+                        </div>
+                        <div className={`flex items-center gap-3 p-3 rounded-lg border transition-all ${!isOdd ? 'bg-blue-50 border-blue-200 shadow-sm' : 'bg-slate-50 border-transparent opacity-60'}`}>
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${!isOdd ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-500'}`}>雙</div>
+                            <div className="flex-1">
+                                <p className={`text-xs font-bold mb-0.5 ${!isOdd ? 'text-blue-800' : 'text-slate-600'}`}>雙數月份 (2, 4, 6...)</p>
+                                <p className="text-xs text-slate-500">♻️ 收舊制服 & 📦 派新制服</p>
+                            </div>
+                            {!isOdd && <i className="fas fa-check-circle text-green-500 text-lg"></i>}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
         function ProductCard({ product, onAdd }) {
             const [customSize, setCustomSize] = useState('');
             const handleCustomAdd = () => {
-                if (customSize.trim()) { onAdd(product, customSize.trim()); setCustomSize(''); }
+                if (customSize.trim()) { onAdd(product.name, customSize.trim(), product.icon); setCustomSize(''); }
             };
             return (
-                <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                    <div className="p-4 flex items-center gap-4 bg-slate-50 border-b border-slate-100">
-                        <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-2xl text-slate-700 shadow-sm border border-slate-100"><i className={`fas ${product.icon}`}></i></div>
-                        <div><h3 className="text-lg font-bold text-slate-800">{product.name}</h3><p className="text-sm text-slate-500">{product.desc}</p></div>
+                <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-4">
+                    <div className="p-4 flex items-start gap-4 bg-slate-50/50">
+                        <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-xl text-red-800 shadow-sm border border-slate-100 shrink-0"><i className={`fas ${product.icon}`}></i></div>
+                        <div className="flex-1"><h3 className="text-base font-bold text-slate-800 leading-tight">{product.name}</h3><p className="text-xs text-slate-500 mt-1 font-mono">{product.desc}</p></div>
                     </div>
-                    <div className="p-4">
+                    <div className="p-4 pt-2">
                         <div className="flex flex-wrap gap-2 mb-3">
                             {product.sizes.map(size => (
-                                <button key={size} onClick={() => onAdd(product, size)} className="px-4 py-2.5 bg-white border border-slate-200 rounded-lg text-lg font-bold text-slate-600 active:bg-red-600 active:text-white active:border-red-600 transition-colors btn-press flex-grow text-center min-w-[3rem]">{size}</button>
+                                <button key={size} onClick={() => onAdd(product.name, size, product.icon)} className="h-10 px-3 bg-white border border-slate-200 rounded-lg text-sm font-bold text-slate-600 active:bg-red-800 active:text-white active:border-red-800 transition-all btn-press shadow-sm flex-grow min-w-[3.5rem]">{size}</button>
                             ))}
                         </div>
-                        <div className="relative flex items-center mt-2">
-                            <div className="absolute left-3 text-slate-400"><i className="fas fa-pen"></i></div>
-                            <input type="text" value={customSize} onChange={(e) => setCustomSize(e.target.value)} placeholder="輸入其他尺碼..." className="w-full bg-slate-50 border border-slate-200 rounded-lg py-3 pl-10 pr-20 text-base outline-none focus:border-red-500 transition-colors" />
-                            {customSize && <button onClick={handleCustomAdd} className="absolute right-1 top-1 bottom-1 bg-red-600 text-white px-4 rounded-md text-sm font-bold shadow-sm btn-press">加入</button>}
+                        <div className="relative flex items-center">
+                            <div className="absolute left-3 text-slate-400 text-xs"><i className="fas fa-pen-to-square"></i></div>
+                            <input type="text" value={customSize} onChange={(e) => setCustomSize(e.target.value)} placeholder="其他尺碼/備註..." className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2.5 pl-9 pr-16 text-sm outline-none focus:border-red-500 focus:bg-white transition-colors" />
+                            {customSize && <button onClick={handleCustomAdd} className="absolute right-1 top-1 bottom-1 bg-red-800 text-white px-3 rounded-md text-xs font-bold shadow-sm btn-press">加入</button>}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function CustomItemSection({ onAdd }) {
+            const [name, setName] = useState('');
+            const [size, setSize] = useState('');
+            const handleAdd = () => {
+                if (name.trim() && size.trim()) {
+                    onAdd(name.trim() + " (自訂)", size.trim(), 'fa-pen-nib');
+                    setName(''); setSize('');
+                    if(navigator.vibrate) navigator.vibrate(50);
+                } else { alert("請填齊資料！"); }
+            };
+            return (
+                <div className="mt-8 mb-24 mx-4">
+                    <div className="bg-slate-800 text-white rounded-xl p-5 shadow-lg relative overflow-hidden">
+                        <div className="absolute -right-4 -top-4 text-slate-700 opacity-20 text-9xl pointer-events-none"><i className="fas fa-circle-question"></i></div>
+                        <h3 className="font-bold text-lg mb-1 flex items-center gap-2 relative z-10"><i className="fas fa-magnifying-glass-plus text-yellow-400"></i> 找不到想要的？</h3>
+                        <div className="space-y-3 relative z-10 mt-4">
+                            <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="制服名稱 (例如: 舊款風褸)" className="w-full bg-slate-700 border border-slate-600 rounded-lg p-3 text-sm text-white placeholder-slate-500 outline-none focus:border-yellow-400" />
+                            <input type="text" value={size} onChange={(e) => setSize(e.target.value)} placeholder="尺碼 / 數量" className="w-full bg-slate-700 border border-slate-600 rounded-lg p-3 text-sm text-white placeholder-slate-500 outline-none focus:border-yellow-400" />
+                            <button onClick={handleAdd} className="w-full bg-yellow-500 hover:bg-yellow-400 text-slate-900 font-bold py-3 rounded-lg shadow-md btn-press flex items-center justify-center gap-2"><i className="fas fa-plus-circle"></i> 加入清單</button>
                         </div>
                     </div>
                 </div>
@@ -108,18 +168,16 @@
                 if (saved) setUserInfo(saved);
             }, []);
 
-            const addToCart = (product, size) => {
-                setCart(prev => [...prev, { cartId: Date.now(), name: product.name, size: size, icon: product.icon }]);
+            const addToCart = (itemName, itemSize, itemIcon) => {
+                setCart(prev => [...prev, { cartId: Date.now(), name: itemName, size: itemSize, icon: itemIcon || 'fa-box' }]);
                 if (navigator.vibrate) navigator.vibrate(50);
             };
             const removeFromCart = (id) => setCart(cart.filter(c => c.cartId !== id));
 
-            // --- 穩定傳送邏輯 (逐個傳 + 延遲) ---
             const handleSubmit = async () => {
                 if (!userInfo || cart.length === 0) return;
                 setIsSubmitting(true);
                 setProgress({ current: 0, total: cart.length });
-
                 for (let i = 0; i < cart.length; i++) {
                     const item = cart[i];
                     try {
@@ -127,21 +185,11 @@
                         formData.append(IDS.NAME, userInfo);
                         formData.append(IDS.ITEM, item.name);
                         formData.append(IDS.SIZE, item.size);
-                        
-                        // 發送請求
                         await fetch(FORM_URL, { method: 'POST', body: formData, mode: 'no-cors' });
-                        
-                        // 更新進度
                         setProgress({ current: i + 1, total: cart.length });
-                        
-                        // 等待 1 秒 (避免 Google Block)
                         await new Promise(r => setTimeout(r, 1000));
-                        
-                    } catch (e) {
-                        console.error("Error", e);
-                    }
+                    } catch (e) { console.error(e); }
                 }
-
                 setIsSubmitting(false);
                 setCart([]);
                 localStorage.setItem('c_team_user_name', userInfo);
@@ -150,43 +198,47 @@
 
             if (view === 'success') {
                 return (
-                    <div className="min-h-screen bg-green-50 flex flex-col items-center justify-center p-6 text-center">
-                        <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-6 shadow-lg animate-bounce"><i className="fas fa-check text-green-600 text-5xl"></i></div>
-                        <h1 className="text-3xl font-bold text-slate-800 mb-2">搞掂！</h1>
-                        <p className="text-lg text-slate-600 mb-10 font-medium"><span className="text-green-700 font-bold text-xl">{userInfo}</span> 師兄<br/>你嘅制服已經報咗名。</p>
-                        <button onClick={() => setView('home')} className="w-full py-4 bg-white border-2 border-green-600 text-green-700 font-bold rounded-xl text-lg shadow-md btn-press">幫另一位師兄報名</button>
+                    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 text-center">
+                        <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-6 shadow-lg animate-bounce text-green-600 text-5xl"><i className="fas fa-check"></i></div>
+                        <h1 className="text-3xl font-black text-slate-800 mb-2 tracking-tight">搞掂晒！</h1>
+                        <p className="text-lg text-slate-600 mb-10 font-medium"><span className="text-green-700 font-bold text-xl">{userInfo}</span> 師兄<br/>已成功報名。</p>
+                        <button onClick={() => setView('home')} className="w-full py-4 bg-slate-800 text-white font-bold rounded-xl text-lg shadow-lg btn-press">幫另一位師兄報名</button>
                     </div>
                 );
             }
 
             if (view === 'checkout') {
                 return (
-                    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
-                        <div className="bg-red-700 text-white p-4 pt-4 pb-4 shadow-md flex items-center gap-4 sticky top-0 z-10">
-                            <button onClick={() => setView('home')} className="px-4 py-2 bg-red-800 rounded-lg text-lg font-bold btn-press"><i className="fas fa-arrow-left mr-2"></i>返回</button>
-                            <h1 className="text-xl font-bold">核對資料</h1>
+                    <div className="min-h-screen bg-slate-100 flex flex-col font-sans">
+                        <div className="wanchai-gradient text-white p-4 pt-4 pb-4 shadow-lg sticky top-0 z-20 flex items-center gap-3">
+                            <button onClick={() => setView('home')} className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm btn-press"><i className="fas fa-chevron-left"></i></button>
+                            <h1 className="text-lg font-bold">核對資料</h1>
                         </div>
                         <div className="flex-1 p-4 overflow-y-auto pb-32">
-                            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-6">
-                                <h2 className="text-sm font-bold text-slate-400 uppercase tracking-wide mb-4 border-b border-slate-100 pb-2">已選制服 ({cart.length})</h2>
-                                {cart.length === 0 ? <div className="text-center text-slate-400 py-4">未揀任何嘢</div> : cart.map(item => (
-                                    <div key={item.cartId} className="flex justify-between items-center py-4 border-b border-slate-100 last:border-0">
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-xl text-slate-600"><i className={`fas ${item.icon}`}></i></div>
-                                            <div><div className="text-lg font-bold text-slate-800">{item.name}</div><div className="text-base text-slate-500">尺碼: <span className="font-bold text-red-600 bg-red-50 px-2 rounded">{item.size}</span></div></div>
-                                        </div>
-                                        <button onClick={() => removeFromCart(item.cartId)} className="w-10 h-10 flex items-center justify-center text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors btn-press"><i className="fas fa-trash-alt"></i></button>
-                                    </div>
-                                ))}
-                            </div>
-                            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-                                <label className="block text-lg font-bold text-slate-800 mb-3 flex items-center gap-2"><i className="fas fa-user-edit text-red-600"></i> 輸入姓名 / UI：</label>
+                            <div className="bg-white rounded-2xl shadow-sm p-6 mb-4 border border-slate-200">
+                                <label className="block text-sm font-bold text-slate-500 mb-2 flex items-center gap-2"><i className="fas fa-id-card-clip text-red-600"></i> 請輸入姓名 / UI</label>
                                 <input type="text" value={userInfo} onChange={e => setUserInfo(e.target.value)} placeholder="例如: 12345 陳大文" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl p-4 text-xl font-bold outline-none focus:border-red-600 focus:bg-white transition-colors" />
                             </div>
+                            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-6">
+                                <h2 className="text-sm font-bold text-slate-400 uppercase tracking-wide mb-4 border-b border-slate-100 pb-2">已選制服 ({cart.length})</h2>
+                                {cart.length === 0 ? <div className="text-center text-slate-400 py-8">未揀任何嘢</div> : (
+                                    <div className="space-y-3">
+                                        {cart.map(item => (
+                                            <div key={item.cartId} className="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-slate-600 shadow-sm"><i className={`fas ${item.icon}`}></i></div>
+                                                    <div><div className="text-sm font-bold text-slate-800">{item.name}</div><div className="text-xs text-slate-500">尺碼: <span className="font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded ml-1">{item.size}</span></div></div>
+                                                </div>
+                                                <button onClick={() => removeFromCart(item.cartId)} className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-red-500 bg-white rounded-full shadow-sm btn-press"><i className="fas fa-xmark"></i></button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                        <div className="p-4 bg-white border-t border-slate-200 fixed bottom-0 left-0 right-0 z-20 safe-area-bottom">
-                            <button onClick={handleSubmit} disabled={isSubmitting || !userInfo || cart.length === 0} className={`w-full py-4 rounded-xl text-xl font-bold text-white shadow-lg btn-press flex items-center justify-center gap-3 ${isSubmitting || !userInfo || cart.length === 0 ? 'bg-slate-300' : 'bg-red-600'}`}>
-                                {isSubmitting ? <><i className="fas fa-spinner fa-spin"></i> 正在傳送 ({progress.current}/{progress.total})...</> : <><i className="fas fa-paper-plane"></i> 確認傳送</>}
+                        <div className="p-4 bg-white border-t border-slate-200 fixed bottom-0 left-0 right-0 z-30 safe-area-bottom shadow-[0_-5px_30px_rgba(0,0,0,0.15)]">
+                            <button onClick={handleSubmit} disabled={isSubmitting || !userInfo || cart.length === 0} className={`w-full py-4 rounded-xl text-lg font-bold text-white shadow-lg btn-press flex items-center justify-center gap-2 ${isSubmitting || !userInfo || cart.length === 0 ? 'bg-slate-400' : 'wanchai-gradient'}`}>
+                                {isSubmitting ? <><i className="fas fa-circle-notch fa-spin"></i> 正在傳送 ({progress.current}/{progress.total})...</> : <><i className="fas fa-paper-plane"></i> 確認傳送</>}
                             </button>
                         </div>
                     </div>
@@ -194,29 +246,37 @@
             }
 
             return (
-                <div className="min-h-screen bg-slate-100 pb-32 font-sans">
-                    <header className="bg-red-700 text-white pt-6 pb-4 px-4 shadow-lg sticky top-0 z-20">
-                        <div className="flex justify-between items-center mb-4">
-                            <div><h1 className="text-2xl font-extrabold tracking-tight">灣仔消防局 <span className="text-sm bg-white text-red-700 px-2 py-0.5 rounded ml-2 align-middle">C 隊專屬</span></h1></div>
+                <div className="min-h-screen bg-slate-100 font-sans">
+                    <header className="wanchai-gradient text-white pt-6 shadow-xl sticky top-0 z-20 relative overflow-hidden">
+                        <div className="absolute right-0 top-0 text-white opacity-5 text-8xl font-black font-mono leading-none pointer-events-none -mr-4 -mt-4">WC</div>
+                        <div className="px-4 pb-2 flex justify-between items-start relative z-10">
+                            <div>
+                                <div className="text-red-200 text-[10px] font-bold tracking-widest uppercase opacity-90 mb-1"><i className="fas fa-fire-extinguisher mr-1"></i> HKFSD</div>
+                                <h1 className="text-2xl font-black tracking-tight leading-none">灣仔消防局 <span className="bg-white text-red-900 text-xs px-2 py-0.5 rounded-full align-middle ml-1 shadow-sm">C 隊</span></h1>
+                            </div>
                             <div className="relative" onClick={() => cart.length > 0 && setView('checkout')}>
-                                <i className="fas fa-shopping-cart text-2xl"></i>
-                                {cart.length > 0 && <span className="absolute -top-2 -right-2 bg-yellow-400 text-red-800 text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-red-700">{cart.length}</span>}
+                                <div className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20 btn-press"><i className="fas fa-cart-shopping"></i></div>
+                                {cart.length > 0 && <span className="absolute -top-1 -right-1 bg-yellow-400 text-red-900 text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-red-800 shadow-sm">{cart.length}</span>}
                             </div>
                         </div>
-                        <div className="flex gap-2 overflow-x-auto pb-1 category-scroll scroll-hide">
+                        <div className="flex gap-3 overflow-x-auto px-4 pb-4 pt-4 hide-scrollbar category-scroll">
                             {CATEGORIES.map(cat => (
-                                <button key={cat} onClick={() => setActiveCategory(cat)} className={`whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold transition-all ${activeCategory === cat ? 'bg-white text-red-700 shadow-md' : 'bg-red-800 text-red-200'}`}>{cat}</button>
+                                <button key={cat} onClick={() => setActiveCategory(cat)} className={`whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-bold transition-all shadow-sm ${activeCategory === cat ? 'bg-white text-red-800 scale-105' : 'bg-red-900/40 text-red-100 hover:bg-red-900/60'}`}>{cat}</button>
                             ))}
                         </div>
                     </header>
-                    <main className="px-4 py-4 space-y-4">
-                        {PRODUCTS.filter(p => p.category === activeCategory).map(product => (<ProductCard key={product.id} product={product} onAdd={addToCart} />))}
+                    <main className="pb-32">
+                        <InfoBanner />
+                        <div className="px-4 py-4 space-y-4">
+                            {PRODUCTS.filter(p => p.category === activeCategory).map(product => (<ProductCard key={product.id} product={product} onAdd={addToCart} />))}
+                        </div>
+                        <CustomItemSection onAdd={addToCart} />
                     </main>
                     {cart.length > 0 && (
-                        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-4 shadow-[0_-5px_20px_rgba(0,0,0,0.1)] z-30 safe-area-bottom">
-                            <div className="flex items-center gap-4">
-                                <div className="flex-1 pl-2"><div className="text-xs text-slate-500 font-bold uppercase">已揀選</div><div className="text-2xl font-bold text-red-600">{cart.length} <span className="text-sm text-slate-800 font-medium">件</span></div></div>
-                                <button onClick={() => setView('checkout')} className="bg-red-600 text-white text-lg font-bold px-6 py-3 rounded-xl shadow-lg btn-press flex items-center gap-2">去填名 <i className="fas fa-arrow-right"></i></button>
+                        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-4 shadow-[0_-5px_30px_rgba(0,0,0,0.15)] z-30 safe-area-bottom glass-effect">
+                            <div className="flex items-center gap-4 max-w-lg mx-auto">
+                                <div className="flex-1 pl-1"><div className="text-xs text-slate-400 font-bold uppercase">已放入清單</div><div className="text-2xl font-black text-slate-800">{cart.length} <span className="text-sm font-normal text-slate-500">件物品</span></div></div>
+                                <button onClick={() => setView('checkout')} className="wanchai-gradient text-white text-lg font-bold px-8 py-3 rounded-xl shadow-lg shadow-red-200 btn-press flex items-center gap-2">去填名 <i className="fas fa-arrow-right"></i></button>
                             </div>
                         </div>
                     )}
