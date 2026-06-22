@@ -1,14 +1,18 @@
+```html
 <!DOCTYPE html>
 <html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>灣仔 C 隊制服預訂</title>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- 轉用最穩定嘅 cdnjs 伺服器，解決白屏問題 -->
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.6/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap');
         body { font-family: 'Noto Sans TC', sans-serif; -webkit-tap-highlight-color: transparent; background-color: #f8fafc; }
@@ -19,14 +23,19 @@
     </style>
 </head>
 <body>
-    <div id="root"></div>
+    <!-- 防白屏載入提示 (如果 load 唔到都會見到字) -->
+    <div id="root">
+        <div style="text-align: center; padding-top: 35vh; color: #991b1b; font-family: sans-serif;">
+            <i class="fas fa-spinner fa-spin" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+            <h2 style="font-weight: bold; font-size: 1.5rem;">系統載入中...</h2>
+            <p style="color: #64748b; margin-top: 10px; font-size: 0.9rem;">(如果停留超過 5 秒，請重新整理)</p>
+        </div>
+    </div>
 
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // ==========================================
         // 🔧 設定區域
-        // ==========================================
         const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSemKuLmfrqvXLTqQT2bK7mScp04kQ5AOfLUDKnZsNyLUDrRhA/formResponse";
         const IDS = {
             NAME: "entry.1386941444",
@@ -67,7 +76,6 @@
 
         const CATEGORIES = [...new Set(PRODUCTS.map(p => p.category))];
 
-        // --- 通告欄組件 ---
         function InfoBanner() {
             const currentMonth = new Date().getMonth() + 1;
             const isOdd = currentMonth % 2 !== 0;
@@ -138,7 +146,7 @@
                     onAdd(name.trim() + " (自訂)", size.trim(), 'fa-pen-nib');
                     setName(''); setSize('');
                     if(navigator.vibrate) navigator.vibrate(50);
-                } else { alert("請填齊資料！"); }
+                } else { alert("請填齊名稱同尺碼！"); }
             };
             return (
                 <div className="mt-8 mb-24 mx-4">
@@ -164,8 +172,10 @@
             const [progress, setProgress] = useState({ current: 0, total: 0 });
 
             useEffect(() => {
-                const saved = localStorage.getItem('c_team_user_name');
-                if (saved) setUserInfo(saved);
+                try {
+                    const saved = localStorage.getItem('c_team_user_name');
+                    if (saved) setUserInfo(saved);
+                } catch(e) {}
             }, []);
 
             const addToCart = (itemName, itemSize, itemIcon) => {
@@ -192,7 +202,7 @@
                 }
                 setIsSubmitting(false);
                 setCart([]);
-                localStorage.setItem('c_team_user_name', userInfo);
+                try { localStorage.setItem('c_team_user_name', userInfo); } catch(e) {}
                 setView('success');
             };
 
@@ -220,7 +230,10 @@
                                 <input type="text" value={userInfo} onChange={e => setUserInfo(e.target.value)} placeholder="例如: 12345 陳大文" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl p-4 text-xl font-bold outline-none focus:border-red-600 focus:bg-white transition-colors" />
                             </div>
                             <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-6">
-                                <h2 className="text-sm font-bold text-slate-400 uppercase tracking-wide mb-4 border-b border-slate-100 pb-2">已選制服 ({cart.length})</h2>
+                                <div className="flex justify-between items-center mb-4 border-b border-slate-100 pb-2">
+                                    <h2 className="text-sm font-bold text-slate-400 uppercase tracking-wide">已選制服 ({cart.length})</h2>
+                                    <button onClick={() => {if(window.confirm('確定清空所有已選制服？')) setCart([])}} className="text-xs text-red-500 font-bold bg-red-50 px-3 py-1 rounded-md">清空</button>
+                                </div>
                                 {cart.length === 0 ? <div className="text-center text-slate-400 py-8">未揀任何嘢</div> : (
                                     <div className="space-y-3">
                                         {cart.map(item => (
@@ -289,3 +302,4 @@
 </body>
 </html>
 
+```
