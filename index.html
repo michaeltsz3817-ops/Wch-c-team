@@ -62,26 +62,49 @@ document.addEventListener('DOMContentLoaded',()=>{
 <script>
 document.addEventListener('DOMContentLoaded',()=>{
   document.head.insertAdjacentHTML('beforeend',`<style>
-    .otherSize{margin-top:10px}.otherSize label{display:block;margin:0 0 6px;color:#aab1b7;font-size:8px;letter-spacing:.04em}.otherSize input{width:100%;min-height:34px;padding:7px 9px;border:1px solid #ffffff1d;border-radius:3px;background:#090b0d;color:#f5f3ee;font-size:10px}.otherSize input::placeholder{color:#68717a}.otherSize input:focus{border-color:#d7b96c;outline:0;box-shadow:0 0 0 2px #d7b96c1c}
+    .addedCount{position:absolute;z-index:4;top:9px;left:9px;padding:5px 8px;background:#f1d797;color:#1d170d;font-size:7px;font-weight:950;letter-spacing:.05em}.removeLine{float:right;padding:4px 7px;border:1px solid #b85d6355;border-radius:2px;background:transparent;color:#df9499;font-size:8px}.removeLine:hover{border-color:#d9787e;background:#8d1c2433}.reviewItem:after{content:'';display:block;clear:both}.otherSize{margin-top:10px}.otherSize label{display:block;margin:0 0 6px;color:#aab1b7;font-size:8px;letter-spacing:.04em}.otherSize input{width:100%;min-height:34px;padding:7px 9px;border:1px solid #ffffff1d;border-radius:3px;background:#090b0d;color:#f5f3ee;font-size:10px}.otherSize input::placeholder{color:#68717a}.otherSize input:focus{border-color:#d7b96c;outline:0;box-shadow:0 0 0 2px #d7b96c1c}
   </style>`);
-  const safeAttr=value=>String(value||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const draftSizes={};
+  const lineId=()=>`line_${Date.now()}_${Math.random().toString(36).slice(2,8)}`;
+  cart=cart.map(item=>item.lineId?item:{...item,lineId:lineId()});
+  localStorage.setItem(KEY,JSON.stringify(cart));
+  const safeText=value=>String(value||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   render=function(){
     grid.innerHTML=P.filter(p=>p[2]===active).map(p=>{
-      const q=cart.find(x=>x.id===p[0]);
+      const added=cart.filter(x=>x.id===p[0]).length,selected=draftSizes[p[0]]||p[3][0];
       const image=p[5]?`<div class="pic product"><span class="index">${p[0]}</span><img class="productImg" src="${p[5]}" alt="${p[1]}"></div>`:`<div class="pic"><span class="index">${p[0]}</span><div class="visual ${p[4]}"><div class="shape"></div></div></div>`;
-      const otherSize=q&&!p[3].includes(q.size)?q.size:'';
-      const customInput=p[3].length>1?`<div class="otherSize"><label for="other-${p[0]}">其他尺碼（如需要）</label><input id="other-${p[0]}" value="${safeAttr(otherSize)}" placeholder="輸入所需尺碼" oninput="setCustomSize('${p[0]}',this.value)"></div>`:'';
-      return `<article class="card ${q?'chosen':''}">${image}${q?'<div class="chosenTag">已選</div>':''}<div class="body"><div class="code">ITEM ${p[0]}</div><h3>${p[1]}</h3><p>${p[2]}</p><div class="sizeLabel">尺碼／規格</div><div class="sizes">${p[3].map(s=>`<button class="size ${q&&q.size===s?'sel':''}" onclick="changeSize('${p[0]}','${s}')">${s}</button>`).join('')}</div>${customInput}<button class="add" onclick="toggleCart('${p[0]}')">${q?'移除選購':'加入選購'}</button></div></article>`;
+      const customValue=p[3].includes(selected)?'':selected;
+      const customInput=p[3].length>1?`<div class="otherSize"><label for="other-${p[0]}">其他尺碼（如需要）</label><input id="other-${p[0]}" value="${safeText(customValue)}" placeholder="輸入所需尺碼" oninput="setCustomSize('${p[0]}',this.value)"></div>`:'';
+      return `<article class="card ${added?'chosen':''}">${image}${added?`<div class="addedCount">已加入 ${added} 件</div>`:''}<div class="body"><div class="code">ITEM ${p[0]}</div><h3>${p[1]}</h3><p>${p[2]}</p><div class="sizeLabel">尺碼／規格</div><div class="sizes">${p[3].map(s=>`<button class="size ${selected===s?'sel':''}" onclick="selectSize('${p[0]}','${s}')">${s}</button>`).join('')}</div>${customInput}<button class="add" onclick="addToCart('${p[0]}')">${added?'再加入 1 件':'加入選購'}</button></div></article>`;
     }).join('');
     updateCartUI();
   };
-  window.setCustomSize=(id,value)=>{
-    const size=value.trim(),item=P.find(p=>p[0]===id),q=cart.find(x=>x.id===id);
-    if(size){if(q)q.size=size;else cart.push({id,size});}
-    else if(q&&!item[3].includes(q.size))q.size=item[3][0];
-    else return;
+  window.selectSize=(id,size)=>{draftSizes[id]=size;render()};
+  window.setCustomSize=(id,value)=>{draftSizes[id]=value;};
+  window.addToCart=id=>{
+    const item=P.find(p=>p[0]===id),size=(draftSizes[id]||item[3][0]).trim();
+    if(!size)return alert('請輸入尺碼／規格');
+    cart.push({id,size,lineId:lineId()});
+    draftSizes[id]=item[3][0];
     localStorage.setItem(KEY,JSON.stringify(cart));
-    updateCartUI();
+    render();
+  };
+  window.addCustom=()=>{
+    const name=customName.value.trim(),size=customSize.value.trim();
+    if(!name)return alert('請輸入項目名稱');
+    cart.push({id:'custom_'+Date.now(),name,size:size||'—',custom:true,lineId:lineId()});
+    localStorage.setItem(KEY,JSON.stringify(cart));
+    customName.value='';customSize.value='';render();
+    alert('已加入其他需要');
+  };
+  window.removeCartItem=id=>{
+    cart=cart.filter(item=>item.lineId!==id);
+    localStorage.setItem(KEY,JSON.stringify(cart));
+    openConfirm();render();
+  };
+  openConfirm=function(){
+    review.innerHTML=cart.map((x,index)=>{const p=P.find(z=>z[0]===x.id),name=x.custom?x.name:p&&p[1],code=x.custom?'其他需要':'ITEM '+x.id;return `<div class="reviewItem"><button class="removeLine" onclick="removeCartItem('${x.lineId}')">移除</button><b>${safeText(name)}</b><div>${code} · ${safeText(x.size)}</div></div>`}).join('');
+    confirmModal.style.display='grid';setTimeout(()=>userName.focus(),0);
   };
   render();
 });
