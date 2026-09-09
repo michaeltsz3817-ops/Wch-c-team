@@ -21,3 +21,37 @@
 <script>
 const SHEET_API='https://script.google.com/macros/s/AKfycbz23oFPCxZ8bfzFsLbNY6IAHPIY_kYG32B6nsaOZRJFN5Gi0xRiMOwLKpKDtP-DyNtI7Q/exec',KEY='c_team_cart',NAMEKEY='c_team_user_name';const IMG32='images/A34BD1FD-DF58-46C0-8979-9B2CFAF05E2F.png',IMG256='images/1FD6B0BC-09B4-4F0B-98EE-FE962E82EF17.png';const P=[['208','跑步鞋','鞋類',['6','7','8','9'],'shoe'],['207','白色帆布鞋','鞋類',['6','7','8','9'],'canvas'],['216','黑色膠鞋 O/R','鞋類',['5','6','7','8'],'boot'],['32','安全工作鞋','鞋類',['6','7','8','9'],'workboot',IMG32],['7','Firetred','鞋類',['6','7','8','9'],'firetred'],['256','工作汗衣','上身',['S','M','L','XL'],'tee',IMG256],['215','長袖藍衛衣','上身',['S','M','L','XL'],'shirt'],['258','藍色長褲','下身',['S','M','L','XL'],'pants'],['247','藍色體育短褲','下身',['S','M','L','XL'],'shorts'],['275','藍色體育背心','運動服',['S','M','L','XL'],'vest'],['245','冬季體育上衣','運動服',['S','M','L','XL'],'sports'],['28','個人裝備袋','配件',['標準'],'bag'],['10','綠色工具袋','配件',['標準'],'toolbag'],['88','布章','配件',['標準'],'badge'],['180','防水布章','配件',['標準'],'badge'],['30','帽','配件',['S','M','L','XL'],'cap'],['57','防火手套','配件',['S','M','L','XL'],'gloves'],['glove_mt','登山手套','配件',['S','M','L','XL'],'mountain']];const C=[['鞋類','鞋類'],['上身','上身'],['下身','下身'],['運動服','運動服'],['配件','配件']];let cart=JSON.parse(localStorage.getItem(KEY)||'[]'),active=C[0][0];const months=['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];function setup(){const d=new Date(),m=d.getMonth(),cur=m+1,nxt=(m+1)%12+1;curMonth.textContent=months[m];nextMonth.textContent=months[(m+1)%12];curStatus.textContent=cur%2?'網上選購／入電腦':'制服到局／安排派發';nextStatus.textContent=nxt%2?'網上選購／入電腦':'制服到局／安排派發';renderTabs();render();userName.value=localStorage.getItem(NAMEKEY)||'';if(localStorage.getItem('wch_intro_seen')==='1')intro.classList.add('hide');else setTimeout(()=>{intro.classList.add('hide');localStorage.setItem('wch_intro_seen','1')},900)}function renderTabs(){tabs.innerHTML=C.map(x=>`<button class="tab ${active===x[0]?'active':''}" onclick="active='${x[0]}';renderTabs();render()"><b>${x[1]}</b><small>${P.filter(p=>p[2]===x[0]).length} ITEMS</small></button>`).join('')}function render(){grid.innerHTML=P.filter(p=>p[2]===active).map(p=>{const q=cart.find(x=>x.id===p[0]),img=p[5]?`<div class="pic product"><span class="index">${p[0]}</span><img class="productImg" src="${p[5]}" alt="${p[1]}"></div>`:`<div class="pic"><span class="index">${p[0]}</span><div class="visual ${p[4]}"><div class="shape"></div></div></div>`;return `<article class="card ${q?'chosen':''}">${img}${q?'<div class="chosenTag">已選</div>':''}<div class="body"><div class="code">ITEM ${p[0]}</div><h3>${p[1]}</h3><p>${p[2]}</p><div class="sizeLabel">尺碼／規格</div><div class="sizes">${p[3].map(s=>`<button class="size ${q&&q.size===s?'sel':''}" onclick="changeSize('${p[0]}','${s}')">${s}</button>`).join('')}</div><button class="add" onclick="toggleCart('${p[0]}')">${q?'移除選購':'加入選購'}</button></div></article>`}).join('');updateCartUI()}function changeSize(id,size){const q=cart.find(x=>x.id===id);if(q)q.size=size;else cart.push({id,size});localStorage.setItem(KEY,JSON.stringify(cart));render()}function toggleCart(id){const i=cart.findIndex(x=>x.id===id);if(i>=0)cart.splice(i,1);else cart.push({id,size:P.find(p=>p[0]===id)[3][0]});localStorage.setItem(KEY,JSON.stringify(cart));render()}function addCustom(){const n=customName.value.trim(),s=customSize.value.trim();if(!n)return alert('請輸入項目名稱');cart.push({id:'custom_'+Date.now(),name:n,size:s||'—',custom:true});localStorage.setItem(KEY,JSON.stringify(cart));customName.value='';customSize.value='';updateCartUI();alert('已加入其他需要')}function updateCartUI(){const n=cart.length;['topCount','heroCount','selectionCount','cartCount'].forEach(id=>document.getElementById(id).textContent=n);goBtn.disabled=!n}function scrollToCart(){window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})}function openConfirm(){review.innerHTML=cart.map(x=>{const p=P.find(z=>z[0]===x.id);return `<div class="reviewItem"><b>${x.custom?x.name:p[1]}</b><div>${x.custom?'其他需要':'ITEM '+x.id} · ${x.size}</div></div>`}).join('');confirmModal.style.display='grid';setTimeout(()=>userName.focus(),0)}function closeConfirm(){confirmModal.style.display='none'}async function submitOrder(){const name=userName.value.trim();if(!name)return alert('請輸入姓名');localStorage.setItem(NAMEKEY,name);const payload={name,items:cart.map(x=>{const p=P.find(z=>z[0]===x.id);return{id:x.id,name:x.custom?x.name:p[1],size:x.size}})};try{await fetch(SHEET_API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)});cart=[];localStorage.setItem(KEY,'[]');closeConfirm();render();alert('已提交，謝謝。')}catch(e){alert('提交失敗，請稍後再試')}}confirmModal.addEventListener('click',e=>{if(e.target===confirmModal)closeConfirm()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeConfirm()});setup();
 </script></body></html>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  P.splice(0,P.length,
+    ['216','水鞋','鞋類',['5','6','7','8'],'boot'],
+    ['32','安全工作鞋','鞋類',['6','7','8','9'],'workboot',IMG32],
+    ['208','運動鞋','鞋類',['6','7','8','9'],'shoe'],
+    ['256','汗衣','上身',['S','M','L','XL'],'tee',IMG256],
+    ['215','長袖藍恤衫','上身',['S','M','L','XL'],'shirt'],
+    ['275','背心運動衫','上身',['S','M','L','XL'],'vest'],
+    ['245','長袖運動衫','上身',['S','M','L','XL'],'sports'],
+    ['247','運動褲','下身',['S','M','L','XL'],'pants'],
+    ['258','藍色長褲','下身',['S','M','L','XL'],'pants'],
+    ['28','個人裝備袋','配件',['標準'],'bag'],
+    ['10','頂更袋','配件',['標準'],'toolbag'],
+    ['badge_3','三柴布膊','配件',['標準'],'badge'],
+    ['badge_3w','三柴防水布膊','配件',['標準'],'badge'],
+    ['badge_2','二柴布膊','配件',['標準'],'badge'],
+    ['badge_2w','二柴防水布膊','配件',['標準'],'badge'],
+    ['badge_1','一柴布膊','配件',['標準'],'badge'],
+    ['badge_1w','一柴防水布膊','配件',['標準'],'badge'],
+    ['88','布膊','配件',['標準'],'badge'],
+    ['180','防水布膊','配件',['標準'],'badge'],
+    ['57','救火手套','配件',['S','M','L','XL'],'gloves'],
+    ['glove_mt','攀山手套','配件',['S','M','L','XL'],'mountain'],
+    ['30','CAP帽','配件',['S','M','L','XL'],'cap']
+  );
+  const legacyIds={207:'208',7:'216'};
+  cart=cart.map(item=>legacyIds[item.id]?{...item,id:legacyIds[item.id]}:item);
+  localStorage.setItem(KEY,JSON.stringify(cart));
+  C.splice(0,C.length,['鞋類','鞋類'],['上身','上身'],['下身','下身'],['配件','配件']);
+  if(!C.some(x=>x[0]===active))active=C[0][0];
+  renderTabs();render();
+});
+</script>
