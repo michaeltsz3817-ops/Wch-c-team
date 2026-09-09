@@ -59,3 +59,30 @@ document.addEventListener('DOMContentLoaded',()=>{
   renderTabs();render();
 });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  document.head.insertAdjacentHTML('beforeend',`<style>
+    .otherSize{margin-top:10px}.otherSize label{display:block;margin:0 0 6px;color:#aab1b7;font-size:8px;letter-spacing:.04em}.otherSize input{width:100%;min-height:34px;padding:7px 9px;border:1px solid #ffffff1d;border-radius:3px;background:#090b0d;color:#f5f3ee;font-size:10px}.otherSize input::placeholder{color:#68717a}.otherSize input:focus{border-color:#d7b96c;outline:0;box-shadow:0 0 0 2px #d7b96c1c}
+  </style>`);
+  const safeAttr=value=>String(value||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  render=function(){
+    grid.innerHTML=P.filter(p=>p[2]===active).map(p=>{
+      const q=cart.find(x=>x.id===p[0]);
+      const image=p[5]?`<div class="pic product"><span class="index">${p[0]}</span><img class="productImg" src="${p[5]}" alt="${p[1]}"></div>`:`<div class="pic"><span class="index">${p[0]}</span><div class="visual ${p[4]}"><div class="shape"></div></div></div>`;
+      const otherSize=q&&!p[3].includes(q.size)?q.size:'';
+      const customInput=p[3].length>1?`<div class="otherSize"><label for="other-${p[0]}">其他尺碼（如需要）</label><input id="other-${p[0]}" value="${safeAttr(otherSize)}" placeholder="輸入所需尺碼" oninput="setCustomSize('${p[0]}',this.value)"></div>`:'';
+      return `<article class="card ${q?'chosen':''}">${image}${q?'<div class="chosenTag">已選</div>':''}<div class="body"><div class="code">ITEM ${p[0]}</div><h3>${p[1]}</h3><p>${p[2]}</p><div class="sizeLabel">尺碼／規格</div><div class="sizes">${p[3].map(s=>`<button class="size ${q&&q.size===s?'sel':''}" onclick="changeSize('${p[0]}','${s}')">${s}</button>`).join('')}</div>${customInput}<button class="add" onclick="toggleCart('${p[0]}')">${q?'移除選購':'加入選購'}</button></div></article>`;
+    }).join('');
+    updateCartUI();
+  };
+  window.setCustomSize=(id,value)=>{
+    const size=value.trim(),item=P.find(p=>p[0]===id),q=cart.find(x=>x.id===id);
+    if(size){if(q)q.size=size;else cart.push({id,size});}
+    else if(q&&!item[3].includes(q.size))q.size=item[3][0];
+    else return;
+    localStorage.setItem(KEY,JSON.stringify(cart));
+    updateCartUI();
+  };
+  render();
+});
+</script>
