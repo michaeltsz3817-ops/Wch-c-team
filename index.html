@@ -29,3 +29,26 @@ $('userName').value=localStorage.getItem('c_team_user_name')||'';$('userName').a
 $('submitBtn').onclick=async()=>{const name=$('userName').value.trim();if(!name)return alert('請先輸入姓名。');if(!cart.length)return alert('請至少選擇一項制服或裝備。');const{m,odd}=monthState(),payload={name,month:m,cycle:odd?'申領月份':'分發月份',items:cart,total:cart.reduce((a,x)=>a+x.qty,0),timestamp:new Date().toISOString()};$('submitBtn').disabled=true;$('submitBtn').textContent='提交中…';try{await fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});$('notice').textContent='✓ 申領已提交。C隊會統一整理資料，並於部門內聯網辦理申領。';$('notice').classList.add('show')}catch(e){$('notice').textContent='提交時出現問題，請稍後再試或直接通知 C隊。';$('notice').classList.add('show')}finally{$('submitBtn').disabled=false;$('submitBtn').textContent='提交申領'}};
 renderSchedule();renderTabs();renderGrid();renderReview();save();setTimeout(()=>$('intro').classList.add('hide'),900);
 </script></body></html>
+<script>
+submitBtn.onclick=async()=>{
+  const name=$('userName').value.trim();
+  if(!name)return alert('請先輸入姓名。');
+  if(!cart.length)return alert('請至少選擇一項制服或裝備。');
+  const{m,odd}=monthState(),payload={name,month:m,cycle:odd?'申領月份':'分發月份',items:cart,total:cart.reduce((a,x)=>a+x.qty,0),timestamp:new Date().toISOString()};
+  $('submitBtn').disabled=true;$('submitBtn').textContent='提交中…';
+  try{
+    await fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+    cart=[];
+    localStorage.removeItem('c_team_cart');
+    localStorage.removeItem('c_team_user_name');
+    $('userName').value='';
+    renderGrid();
+    renderReview();
+    $('cartCount').textContent='0';
+    $('selectedCount').textContent='0';
+    $('notice').textContent='✓ 申領已提交。C隊會統一整理資料，並於部門內聯網辦理申領。';
+    $('notice').classList.add('show');
+  }catch(e){$('notice').textContent='提交時出現問題，請稍後再試或直接通知 C隊。';$('notice').classList.add('show')}
+  finally{$('submitBtn').disabled=false;$('submitBtn').textContent='提交申領'}
+};
+</script>
