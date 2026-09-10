@@ -850,6 +850,77 @@ padding:0 7px
 }
 
 }
+
+
+/* Premium C Team visual system */
+:root{
+  --silver:#c9d0d4;
+  --silver-dim:#8f9aa1;
+  --gold-bright:#ffe5a0;
+  --red-bright:#d9434e;
+  --shadow:0 24px 70px rgba(0,0,0,.34);
+}
+body{background:radial-gradient(ellipse 90% 45% at 50% -15%,#3a4249 0%,#15191d 42%,#08090b 78%);}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.16;background-image:linear-gradient(115deg,transparent 0 48%,#fff 49%,transparent 50%),linear-gradient(25deg,transparent 0 48%,#fff 49%,transparent 50%);background-size:8px 8px;mask-image:linear-gradient(to bottom,black,transparent 55%);}
+.top{box-shadow:0 10px 35px #0005;}
+.topin{min-height:66px;}
+.brand,.cartTop,.btn,.tab,.size,.customBtn,.qty button,.submit{transition:transform .2s ease,border-color .2s ease,background .2s ease,box-shadow .2s ease,filter .2s ease;}
+.brand:hover{transform:translateX(2px);}
+.cartTop{border-color:#d7b96c55;border-radius:999px;box-shadow:0 7px 25px #0004;}
+.cartTop:hover{border-color:var(--gold-bright);transform:translateY(-2px);}
+.hero{min-height:680px;}
+.hero:after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 82% 37%,#d7b96c18,transparent 25%),linear-gradient(90deg,transparent 60%,#0004);mix-blend-mode:screen;}
+.heroIn{min-height:680px;max-width:1440px;margin:auto;}
+.crest{box-shadow:0 0 0 8px #d7b96c0d,0 20px 70px #000b;animation:crestFloat 5s ease-in-out infinite;}
+@keyframes crestFloat{50%{transform:translateY(-7px);}}
+.hero h1{text-shadow:0 12px 40px #000b;}
+.hero h1 span{background:linear-gradient(100deg,#fff2bc,var(--gold),#fff2bc);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.desc{max-width:520px;color:#d2d7d9;}
+.btn{border-radius:4px;box-shadow:0 10px 24px #0003;}
+.btn:hover{transform:translateY(-3px);border-color:var(--gold-bright);box-shadow:0 16px 30px #0006;}
+.primary:hover,.submit:hover{filter:brightness(1.08);}
+.wrap{padding-top:72px;padding-bottom:72px;}
+.sectionHead{position:relative;}
+.sectionHead:after{content:"";width:58px;height:2px;position:absolute;left:0;bottom:-10px;background:linear-gradient(90deg,var(--gold),transparent);}
+.schedule,.review{border-color:#ffffff2a;border-radius:12px;box-shadow:var(--shadow);overflow:hidden;}
+.sb{background:linear-gradient(140deg,#1c2227,#111417);}
+.status{background:linear-gradient(140deg,#551a21,#15171a)!important;}
+.tabs{padding-top:7px;}
+.tab{border-radius:6px;box-shadow:0 8px 18px #0002;}
+.tab:hover{transform:translateY(-3px);border-color:#d7b96c88;color:#fff;}
+.tab.active{box-shadow:0 10px 24px #8f202966;}
+.hint{border-radius:0 8px 8px 0;box-shadow:0 10px 25px #0003;}
+.card{border-radius:10px;box-shadow:0 12px 30px #0004;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;}
+.card:hover{transform:translateY(-6px);box-shadow:0 22px 42px #0008;border-color:#d7b96c66;}
+.card.chosen{box-shadow:0 0 0 1px #d7b96c55 inset,0 18px 38px #0007;}
+.pic{background:radial-gradient(circle at 50% 25%,#515b63,#232b31 42%,#0b0d10 80%);}
+.pic.product{background:radial-gradient(circle at 50% 30%,#2b3136,#0b0d10 72%);}
+.size{border-radius:4px;}
+.size:hover,.qty button:hover,.customBtn:hover{border-color:var(--gold-bright);color:#fff;transform:translateY(-2px);}
+.size.sel{box-shadow:0 0 0 2px #ffe5a044;}
+.customInput:focus,.nameRow input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px #d7b96c22;}
+.review{margin-top:42px;}
+.reviewItem{border-radius:6px;}
+.remove:hover{color:#ff9da4;}
+.submit{border-radius:6px;box-shadow:0 15px 30px #8e6b1d33;}
+.notice{border-radius:0 6px 6px 0;}
+footer{border-top:1px solid #ffffff12;}
+@media(max-width:560px){
+  .topin{min-height:58px;}
+  .cn{font-size:12px;}
+  .cartTop{padding:7px 10px;}
+  .hero,.heroIn{min-height:650px;}
+  .hero:before{background-position:64% 26%;background-size:720px auto;}
+  .heroIn{padding-top:70px;padding-bottom:80px;}
+  .desc{font-size:11px;line-height:1.8;}
+  .wrap{padding-top:48px;padding-bottom:48px;}
+  .sectionHead h2{font-size:26px;}
+  .card:hover{transform:none;}
+  .pic{height:152px;}
+  .review{margin-top:30px;}
+}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important;}}
+
 </style>
 </head>
 
