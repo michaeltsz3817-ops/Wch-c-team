@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#090a0c">
 <title>灣仔消防局 C隊｜制服申領平台</title>
+<!-- C TEAM PORTAL v2.1 -->
 
 <style>
 :root{
@@ -922,18 +923,31 @@ footer{border-top:1px solid #ffffff12;}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important;}}
 
 
-
-/* Mobile interaction pass */
-.tabs{position:sticky;top:66px;z-index:30;padding:10px 0 14px;background:linear-gradient(180deg,#090a0cf7 72%,transparent);scroll-snap-type:x proximity;}
-.tab{scroll-snap-align:start;}
-.size,.qty button,.customBtn{min-height:38px;}
-.card:focus-within{border-color:#d7b96caa;box-shadow:0 0 0 2px #d7b96c20,0 18px 38px #0007;}
+/* ===== C TEAM PORTAL v2.1 ===== */
+.sizeRow{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.sizeQty{display:flex;align-items:center;gap:4px}
+.sizeQty button{width:25px;height:25px;padding:0;border:1px solid #ffffff1b;background:#0a0c0e;color:#ddd;border-radius:4px}
+.sizeQty span{min-width:18px;text-align:center;font-size:9px;font-weight:900;color:var(--hi)}
+.sizeQty button:hover{border-color:var(--gold-bright);color:#fff;transform:translateY(-1px)}
+.floatingCart{position:fixed;right:16px;bottom:18px;z-index:90;display:flex;align-items:center;gap:8px;padding:11px 14px;border:1px solid #d7b96c88;border-radius:999px;background:#101317ee;color:#fff;box-shadow:0 14px 35px #0008;backdrop-filter:blur(14px);font-size:9px;font-weight:900;transition:.2s}
+.floatingCart:hover{transform:translateY(-3px);border-color:var(--gold-bright)}
+.floatingCart b{display:grid;place-items:center;min-width:22px;height:22px;border-radius:50%;background:var(--gold);color:#19140b;font-size:9px}
+.confirmOverlay{position:fixed;inset:0;z-index:1000;display:none;place-items:center;padding:18px;background:#000b;backdrop-filter:blur(12px)}
+.confirmOverlay.show{display:grid}
+.confirmBox{width:min(520px,100%);max-height:min(760px,90vh);overflow:auto;padding:22px;border:1px solid #ffffff2b;border-radius:14px;background:linear-gradient(145deg,#1a1f24,#0d1013);box-shadow:0 30px 90px #000b}
+.confirmBox h3{margin:0 0 6px;font-size:20px}
+.confirmBox>p{margin:0 0 17px;color:#929aa1;font-size:9px;line-height:1.7}
+.confirmName{padding:10px 12px;margin-bottom:10px;border:1px solid #ffffff18;background:#0a0c0e;font-size:11px}
+.confirmList{display:grid;gap:6px;margin-bottom:14px}
+.confirmItem{display:flex;justify-content:space-between;gap:12px;padding:10px 11px;border:1px solid #ffffff13;background:#0c0f12;font-size:9px}
+.confirmItem small{color:#929aa0}
+.confirmTotal{padding:11px 12px;margin-bottom:15px;border-top:1px solid #ffffff18;border-bottom:1px solid #ffffff18;font-size:10px;font-weight:900}
+.confirmActions{display:grid;grid-template-columns:1fr 1.3fr;gap:8px}
+.confirmActions button{min-height:46px;border:1px solid #ffffff20;background:#101317;color:#fff;font-size:10px;font-weight:900}
+.confirmActions .confirmSubmit{border-color:var(--gold);background:linear-gradient(135deg,var(--hi),var(--gold));color:#1a150c}
 @media(max-width:560px){
-  .tabs{top:57px;padding-top:9px;}
-  .tab{min-height:48px;min-width:96px;}
-  .size{min-width:40px;min-height:40px;font-size:10px;}
-  .customBtn{min-height:38px;}
-  .qty button{width:38px;height:38px;}
+  .floatingCart{right:10px;bottom:10px;padding:10px 12px}
+  .confirmBox{padding:17px}
 }
 
 </style>
@@ -991,6 +1005,25 @@ C TEAM · UNIFORM PORTAL
 </div>
 
 </header>
+
+
+<a class="floatingCart" id="floatingCart" href="#review" aria-label="前往我的申領">
+  我的申領 <b id="floatingCartCount">0</b>
+</a>
+
+<div class="confirmOverlay" id="confirmOverlay" aria-hidden="true">
+  <div class="confirmBox" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <h3 id="confirmTitle">確認申領資料</h3>
+    <p>提交前請最後核對以下資料。提交後今次選擇會被清除。</p>
+    <div class="confirmName" id="confirmName"></div>
+    <div class="confirmList" id="confirmList"></div>
+    <div class="confirmTotal" id="confirmTotal"></div>
+    <div class="confirmActions">
+      <button type="button" id="cancelConfirm">返回修改</button>
+      <button type="button" class="confirmSubmit" id="confirmSubmit">確認提交</button>
+    </div>
+  </div>
+</div>
 
 <main id="home">
 
@@ -1130,7 +1163,7 @@ SELECT YOUR UNIFORM
 
 <div class="hint">
 揀選尺寸後會<strong>即時加入「我的申領」</strong>，毋須再按加入。
-每件物品亦可輸入自訂尺寸，方便申領沒有預設尺碼嘅情況。
+同一物品如需多個尺寸，可分別調整各尺寸數量；亦可輸入自訂尺寸。
 </div>
 
 <div class="tabs" id="tabs"></div>
@@ -1349,137 +1382,119 @@ x=>x.id===id&&x.size===size
 
 function renderGrid(){
 
-const list=P.filter(
-x=>x[2]===currentCat
-);
+  const list=P.filter(x=>x[2]===currentCat);
 
-$('grid').innerHTML=list.map(p=>{
+  $('grid').innerHTML=list.map(p=>{
 
-const[id,name,cat,sizes,cls,img]=p;
+    const[id,name,cat,sizes,cls,img]=p;
+    const qty=rowQty(id);
 
-const qty=rowQty(id);
+    return`
 
-return`
+      <article class="card ${qty?'chosen':''}">
 
-<article class="card ${qty?'chosen':''}">
+        <div class="pic ${img?'product':''}">
+          ${
+            img
+            ?`<img class="productImg" src="${img}" alt="${name}">`
+            :`<div class="visual ${cls}">
+              <div class="shape"></div>
+            </div>`
+          }
 
-<div class="pic ${img?'product':''}">
+          <span class="index">ITEM ${id}</span>
 
-${
-img
-?`<img class="productImg" src="${img}" alt="${name}">`
-:`<div class="visual ${cls}">
-<div class="shape"></div>
-</div>`
-}
+          ${
+            qty
+            ?`<span class="chosenTag">已選 ${qty} 件</span>`
+            :''
+          }
+        </div>
 
-<span class="index">
-ITEM ${id}
-</span>
+        <div class="body">
 
-${
-qty
-?`<span class="chosenTag">已選 ${qty} 件</span>`
-:''
-}
+          <div class="code">ITEM CODE · ${id}</div>
 
-</div>
+          <h3>${name}</h3>
 
-<div class="body">
+          <p>${cat}</p>
 
-<div class="code">
-ITEM CODE · ${id}
-</div>
+          <div class="sizeLabel">
+            選擇尺寸 · 揀選後即時加入
+          </div>
 
-<h3>
-${name}
-</h3>
+          <div class="sizes">
 
-<p>
-${cat}
-</p>
+            ${
+              sizes.map(s=>{
+                const q=cart.find(x=>x.id===id&&x.size===s);
+                const n=q?q.qty:0;
 
-<div class="sizeLabel">
-選擇尺寸 · 揀選後即時加入
-</div>
+                return`
+                  <div class="sizeRow">
 
-<div class="sizes">
+                    <button
+                      class="size ${n?'sel':''}"
+                      onclick="addItem('${id}','${s}')"
+                    >${s}</button>
 
-${
-sizes.map(s=>`
+                    ${
+                      n
+                      ?`<div class="sizeQty">
+                          <button type="button" onclick="changeSizeQty('${id}','${s}',-1)">−</button>
+                          <span>${n}</span>
+                          <button type="button" onclick="changeSizeQty('${id}','${s}',1)">＋</button>
+                        </div>`
+                      :''
+                    }
 
-<button
-class="size ${isSel(id,s)?'sel':''}"
-onclick="addItem('${id}','${s}')"
->
-${s}
-</button>
+                  </div>
+                `;
 
-`).join('')
-}
+              }).join('')
+            }
 
-</div>
+          </div>
 
-<div class="customLabel">
-沒有合適尺寸？輸入自訂尺寸
-</div>
+          <div class="customLabel">
+            沒有合適尺寸？輸入自訂尺寸
+          </div>
 
-<div class="customRow">
+          <div class="customRow">
 
-<input
-class="customInput"
-id="custom-${id}"
-maxlength="30"
-placeholder="例如：XXL／42／自訂"
->
+            <input
+              class="customInput"
+              id="custom-${id}"
+              maxlength="30"
+              placeholder="例如：XXL／42／自訂"
+            >
 
-<button
-class="customBtn"
-onclick="addCustom('${id}')"
->
-加入
-</button>
+            <button
+              class="customBtn"
+              onclick="addCustom('${id}')"
+            >加入</button>
 
-</div>
+          </div>
 
-${
-qty
-?`
+          ${
+            qty
+            ?`
+              <div class="addedHint">
+                ✓ 已加入我的申領 · ${qty} 件
+              </div>
+            `
+            :''
+          }
 
-<div class="qty">
+        </div>
 
-<button onclick="changeQty('${id}',-1)">
-−
-</button>
+      </article>
 
-<span>
-${qty}
-</span>
+    `;
 
-<button onclick="changeQty('${id}',1)">
-＋
-</button>
-
-</div>
-
-<div class="addedHint">
-✓ 已加入我的申領
-</div>
-
-`
-:''
-}
-
-</div>
-
-</article>
-
-`;
-
-}).join('');
+  }).join('');
 
 }
-
 function setCat(c){
 
 currentCat=c;
@@ -1545,32 +1560,38 @@ input.value='';
 
 }
 
+function changeSizeQty(id,size,delta){
+
+  const q=cart.find(x=>x.id===id&&x.size===size);
+
+  if(!q && delta>0){
+    addItem(id,size);
+    return;
+  }
+
+  if(!q)return;
+
+  q.qty+=delta;
+
+  if(q.qty<=0){
+    cart=cart.filter(x=>x!==q);
+  }
+
+  save();
+  renderGrid();
+  renderReview();
+
+}
+
 function changeQty(id,delta){
 
-let rows=cart.filter(
-x=>x.id===id
-);
+  const rows=cart.filter(x=>x.id===id);
 
-if(!rows.length)return;
+  if(!rows.length)return;
 
-let q=rows[rows.length-1];
-
-q.qty+=delta;
-
-if(q.qty<=0){
-
-cart=cart.filter(
-x=>x!==q
-);
+  changeSizeQty(id,rows[rows.length-1].size,delta);
 
 }
-
-save();
-renderGrid();
-renderReview();
-
-}
-
 function removeRow(i){
 
 cart.splice(i,1);
@@ -1666,199 +1687,203 @@ renderReview();
    提交申領
    ========================= */
 
+let submitting=false;
+
+function openConfirm(){
+
+  const name=$('userName').value.trim();
+
+  if(!name){
+    alert('請先輸入姓名。');
+    $('userName').focus();
+    return;
+  }
+
+  if(!cart.length){
+    alert('請至少選擇一項制服或裝備。');
+    return;
+  }
+
+  $('confirmName').textContent='申領人：'+name;
+
+  $('confirmList').innerHTML=cart.map(x=>`
+    <div class="confirmItem">
+      <div><b>ITEM ${x.id}</b> · ${x.name}</div>
+      <small>尺寸 ${x.size} · ${x.qty} 件</small>
+    </div>
+  `).join('');
+
+  const total=cart.reduce((a,x)=>a+x.qty,0);
+  $('confirmTotal').textContent='合共 '+total+' 件';
+
+  $('confirmOverlay').classList.add('show');
+  $('confirmOverlay').setAttribute('aria-hidden','false');
+
+}
+
 $('submitBtn').onclick=()=>{
 
-const name=$('userName').value.trim();
+  if(submitting)return;
 
-if(!name){
-
-alert('請先輸入姓名。');
-
-return;
-
-}
-
-if(!cart.length){
-
-alert('請至少選擇一項制服或裝備。');
-
-return;
-
-}
-
-const{m,odd}=monthState();
-
-const payload={
-
-name,
-
-month:m,
-
-cycle:odd?'申領月份':'分發月份',
-
-items:cart,
-
-total:cart.reduce(
-(a,x)=>a+x.qty,
-0
-),
-
-timestamp:new Date().toISOString()
+  openConfirm();
 
 };
 
-const btn=$('submitBtn');
+$('cancelConfirm').onclick=()=>{
 
-const notice=$('notice');
+  $('confirmOverlay').classList.remove('show');
+  $('confirmOverlay').setAttribute('aria-hidden','true');
 
-btn.disabled=true;
+};
 
-btn.textContent='資料提交中…';
+$('confirmOverlay').addEventListener('click',e=>{
 
-notice.textContent=
-'正在將申領資料同步至 C隊系統…';
+  if(e.target===$('confirmOverlay')){
+    $('cancelConfirm').click();
+  }
 
-notice.classList.add('show');
-
-let queued=false;
-
-
-/*
-  優先使用 sendBeacon。
-
-  sendBeacon 會將資料交俾瀏覽器
-  背景傳送，唔需要等 Google Apps Script
-  回覆先更新畫面。
-*/
-
-try{
-
-if(navigator.sendBeacon){
-
-const blob=new Blob(
-[
-JSON.stringify(payload)
-],
-{
-type:'text/plain;charset=utf-8'
-}
-);
-
-queued=navigator.sendBeacon(
-ENDPOINT,
-blob
-);
-
-}
-
-}catch(e){
-
-queued=false;
-
-}
-
-
-/*
-  如果 sendBeacon 唔支援，
-  使用 keepalive fetch 作後備。
-*/
-
-if(!queued){
-
-try{
-
-fetch(
-ENDPOINT,
-{
-method:'POST',
-mode:'no-cors',
-headers:{
-'Content-Type':
-'text/plain;charset=utf-8'
-},
-body:JSON.stringify(payload),
-keepalive:true
-}
-);
-
-queued=true;
-
-}catch(e){
-
-queued=false;
-
-}
-
-}
-
-
-/*
-  如果連背景提交都無法建立，
-  就唔清除資料，避免資料遺失。
-*/
-
-if(!queued){
-
-btn.disabled=false;
-
-btn.textContent='提交申領';
-
-notice.textContent=
-'提交失敗，請檢查網絡後再試。';
-
-return;
-
-}
-
-
-/*
-  到呢一步代表瀏覽器已經接受
-  呢份資料進行背景傳送。
-*/
-
-cart=[];
-
-localStorage.removeItem(
-'c_team_cart'
-);
-
-localStorage.removeItem(
-'c_team_user_name'
-);
-
-$('userName').value='';
-
-save();
-
-renderGrid();
-
-renderReview();
-
-notice.textContent=
-'✓ 申領已提交。資料正在背景同步至 C隊系統。';
-
-notice.classList.add('show');
-
-notice.scrollIntoView({
-behavior:'smooth',
-block:'center'
 });
 
+$('confirmSubmit').onclick=()=>{
 
-/*
-  唔需要再等 Google Apps Script。
-*/
+  if(submitting)return;
 
-setTimeout(()=>{
+  const name=$('userName').value.trim();
 
-btn.disabled=false;
+  if(!name||!cart.length){
+    $('cancelConfirm').click();
+    return;
+  }
 
-btn.textContent='提交申領';
+  const{m,odd}=monthState();
 
-},700);
+  const payload={
+    name,
+    month:m,
+    cycle:odd?'申領月份':'分發月份',
+    items:cart,
+    total:cart.reduce((a,x)=>a+x.qty,0),
+    timestamp:new Date().toISOString()
+  };
+
+  const btn=$('submitBtn');
+  const confirmBtn=$('confirmSubmit');
+  const notice=$('notice');
+
+  submitting=true;
+
+  btn.disabled=true;
+  confirmBtn.disabled=true;
+
+  btn.textContent='資料提交中…';
+  confirmBtn.textContent='提交中…';
+
+  notice.textContent='正在將申領資料同步至 C隊系統…';
+  notice.classList.add('show');
+
+  let queued=false;
+
+  try{
+
+    if(navigator.sendBeacon){
+
+      const blob=new Blob(
+        [JSON.stringify(payload)],
+        {type:'text/plain;charset=utf-8'}
+      );
+
+      queued=navigator.sendBeacon(ENDPOINT,blob);
+
+    }
+
+  }catch(e){
+
+    queued=false;
+
+  }
+
+  if(!queued){
+
+    try{
+
+      fetch(ENDPOINT,{
+        method:'POST',
+        mode:'no-cors',
+        headers:{
+          'Content-Type':'text/plain;charset=utf-8'
+        },
+        body:JSON.stringify(payload),
+        keepalive:true
+      });
+
+      queued=true;
+
+    }catch(e){
+
+      queued=false;
+
+    }
+
+  }
+
+  if(!queued){
+
+    submitting=false;
+
+    btn.disabled=false;
+    confirmBtn.disabled=false;
+
+    btn.textContent='提交申領';
+    confirmBtn.textContent='確認提交';
+
+    notice.textContent='提交失敗，請檢查網絡後再試。';
+
+    return;
+
+  }
+
+  cart=[];
+
+  localStorage.removeItem('c_team_cart');
+  localStorage.removeItem('c_team_user_name');
+
+  $('userName').value='';
+
+  save();
+  renderGrid();
+  renderReview();
+
+  $('confirmOverlay').classList.remove('show');
+  $('confirmOverlay').setAttribute('aria-hidden','true');
+
+  notice.textContent='✓ 申領資料已送出。資料正在背景同步至 C隊系統。';
+  notice.classList.add('show');
+
+  notice.scrollIntoView({
+    behavior:'smooth',
+    block:'center'
+  });
+
+  setTimeout(()=>{
+
+    btn.disabled=false;
+    confirmBtn.disabled=false;
+
+    btn.textContent='提交申領';
+    confirmBtn.textContent='確認提交';
+
+    submitting=false;
+
+  },700);
 
 };
+document.addEventListener('keydown',e=>{
 
+  if(e.key==='Escape' && $('confirmOverlay').classList.contains('show')){
+    $('cancelConfirm').click();
+  }
+
+});
 
 /* =========================
    初始化
