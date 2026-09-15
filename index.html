@@ -1,17 +1,157 @@
 <!doctype html>
 <html lang="zh-HK">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#07090b"><title>灣仔消防局 C隊｜制服訂購</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07090b">
+<title>灣仔消防局 C隊｜制服申領平台</title>
 <style>
-:root{--bg:#07090b;--panel:#11151a;--panel2:#171c22;--gold:#d7b873;--red:#a21d26;--muted:#8c949c;--line:#ffffff1c;--safe:env(safe-area-inset-bottom,0px)}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",Arial,sans-serif;padding-bottom:76px}button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:transparent}.top{position:sticky;top:0;z-index:30;background:#07090bf2;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.topin{max-width:1400px;margin:auto;padding:10px 14px;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:10px}.mark{width:42px;height:42px;border:1px solid #d7b873aa;border-radius:50%;display:grid;place-items:center;color:var(--gold);font-size:25px;font-weight:900}.cn{font-size:13px;font-weight:900}.en{font-size:7px;color:#90979e;letter-spacing:.15em;margin-top:3px}.nav{display:none}.cartTop{font-size:9px;border:1px solid var(--line);padding:9px 11px}.cartTop b{color:var(--gold)}.hero{position:relative;overflow:hidden;background:linear-gradient(180deg,#050607d9,#07090bf5),url("images/hero.jpg") center/cover}.heroIn{max-width:1400px;margin:auto;padding:35px 16px 55px}.heroTag{color:var(--gold);font-size:8px;letter-spacing:.24em}.hero h1{font-size:clamp(46px,13vw,100px);line-height:.88;letter-spacing:-.05em;margin:9px 0}.hero h1 span{display:block;color:var(--gold)}.hero p{max-width:560px;color:#b9c0c7;font-size:11px;line-height:1.7}.heroBtn{margin-top:10px;border:1px solid #d7b87399;background:var(--gold);color:#15120c;padding:12px 16px;font-size:9px;font-weight:900;letter-spacing:.1em}.wrap{max-width:1400px;margin:auto;padding:25px 14px}.cats{display:flex;gap:7px;overflow:auto;scrollbar-width:none}.cats::-webkit-scrollbar{display:none}.cat{flex:0 0 auto;min-width:88px;padding:11px;background:#0d1014;color:#969da4;border:1px solid var(--line);border-radius:3px;text-align:left}.cat.active{background:linear-gradient(135deg,#8d1b22,#4a0f14);color:#fff;border-color:#c78387}.cat b{display:block;font-size:11px}.cat small{font-size:7px;letter-spacing:.12em}.head{display:flex;justify-content:space-between;align-items:end;margin:20px 0 14px}.head .k{font-size:8px;color:var(--gold);letter-spacing:.22em}.head h2{margin:6px 0 0;font-size:27px}.head .note{font-size:7px;color:#747c84}.schedule{display:grid;border:1px solid var(--line);background:var(--panel)}.sb{padding:15px;border-bottom:1px solid var(--line)}.sb:last-child{border:0}.sb .t{color:var(--gold);font-size:7px;letter-spacing:.16em}.sb .big{font-size:19px;font-weight:900;margin-top:5px}.sb p{font-size:9px;line-height:1.6;color:#858d95;margin:6px 0 0}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.card{background:linear-gradient(#151a20,#0c0f12);border:1px solid var(--line);border-radius:3px;overflow:hidden}.pic{height:145px;background:radial-gradient(circle at 50% 35%,#2b3036,#0b0e11 72%);display:grid;place-items:center;position:relative;overflow:hidden}.pic img{width:100%;height:100%;object-fit:cover;display:block}.pic .shade{position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,#05060877)}.chosen{position:absolute;top:7px;left:7px;z-index:2;background:var(--gold);color:#17130c;padding:5px 7px;font-size:7px;font-weight:900}.body{padding:10px}.code{font-size:7px;color:var(--gold);letter-spacing:.16em}.body h3{font-size:13px;margin:5px 0 2px;line-height:1.2}.body p{font-size:7px;color:#747c84;margin:0}.sizeLabel{font-size:7px;color:#858d95;margin:9px 0 5px}.sizes{display:flex;flex-wrap:wrap;gap:4px}.size{min-width:29px;min-height:29px;padding:5px 7px;background:#0b0e11;color:#b5bbc1;border:1px solid var(--line);font-size:8px;border-radius:2px}.size.sel{background:var(--gold);color:#17130c;border-color:var(--gold);font-weight:900}.add{width:100%;margin-top:8px;padding:9px 5px;background:transparent;color:#fff;border:1px solid #d7b87366;font-size:8px;letter-spacing:.08em}.card.isChosen .add{background:#8e1b23;border-color:#a21d26}.custom{margin-top:18px;padding:15px;border:1px solid #d7b87344;background:linear-gradient(135deg,#101318,#211418)}.custom h3{margin:0;font-size:15px}.custom p{font-size:9px;color:#858d95;line-height:1.55}.custom input{width:100%;margin-top:6px;background:#090c10;border:1px solid var(--line);padding:11px;color:#fff}.custom button{width:100%;margin-top:7px}.cartbar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:#07090bf5;backdrop-filter:blur(16px);border-top:1px solid var(--line);padding-bottom:var(--safe)}.cartin{max-width:1400px;margin:auto;padding:9px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px}.cartText{font-size:9px;color:#aab0b7}.cartText b{font-size:17px;color:#fff}.go{min-height:43px;background:var(--gold);border:0;padding:11px 16px;font-size:9px;font-weight:900}.go:disabled{opacity:.3}.modal{position:fixed;inset:0;z-index:90;background:#000d;display:grid;place-items:end center}.mc{width:100%;max-height:92vh;overflow:auto;background:#11151a;border:1px solid #d7b87366;padding:18px 15px calc(18px + var(--safe))}.mc h3{margin:0;font-size:21px}.sub{font-size:9px;color:#8c949c;margin-top:5px}.rows{margin:14px 0;border-top:1px solid var(--line)}.row{display:grid;grid-template-columns:1fr auto auto;gap:7px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);font-size:10px}.row select{background:#090c10;color:#fff;border:1px solid var(--line);padding:7px}.del{background:none;border:0;color:#888;font-size:21px}.summary{background:#0b0e12;border:1px solid var(--line);padding:10px;font-size:9px;color:#aab0b7}.mc label{display:block;color:#9da4ab;font-size:8px;margin:14px 0 5px}.mc input{width:100%;background:#090c10;border:1px solid var(--line);padding:13px;color:#fff}.actions{display:flex;gap:7px;margin-top:13px}.actions button{flex:1}.btn{min-height:44px;border:1px solid #d7b87399;background:transparent;color:#fff;padding:10px;font-size:9px}.primary{background:var(--gold);color:#17130c;font-weight:900}.ok{text-align:center}.ok .tick{font-size:50px;color:var(--gold)}footer{padding:40px 14px 90px;border-top:1px solid var(--line);color:#777f87;font-size:8px;letter-spacing:.16em}footer b{display:block;color:var(--gold);font-size:24px;margin-top:5px}@media(min-width:700px){.topin{padding:12px 28px}.mark{width:48px;height:48px}.cn{font-size:15px}.en{font-size:9px}.nav{display:flex;gap:28px;font-size:9px;letter-spacing:.16em;color:#aab0b7}.heroIn{padding:75px 28px 100px}.hero p{font-size:12px}.wrap{padding:40px 28px}.cats{display:grid;grid-template-columns:repeat(5,1fr);overflow:visible}.cat{border-radius:0;padding:18px}.schedule{grid-template-columns:repeat(3,1fr)}.sb{border-right:1px solid var(--line);border-bottom:0;padding:23px}.sb:last-child{border-right:0}.grid{grid-template-columns:repeat(4,1fr);gap:14px}.pic{height:235px}.body{padding:14px}.body h3{font-size:15px}.custom{padding:20px}.custom input{width:70%;margin-right:5px}.custom button{width:auto}.cartin{padding:10px 28px}.mc{width:min(620px,100%);max-height:88vh;border:1px solid #d7b87366;padding:24px;margin:16px;place-self:center}}
-</style></head>
+:root{
+  --bg:#070809;--panel:#0d1012;--gold:#d8b866;--gold2:#f0d58b;
+  --red:#9f1820;--muted:#92979b;--line:#ffffff18;
+  --safe:env(safe-area-inset-bottom,0px)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",Arial,sans-serif;padding-bottom:78px}
+button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.top{position:sticky;top:0;z-index:50;height:76px;background:#080a0bf5;border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
+.topin{height:100%;max-width:1500px;margin:auto;padding:0 38px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:48px;height:48px;border-radius:50%;object-fit:cover;border:1px solid var(--gold);box-shadow:0 0 0 2px #000}
+.brandcn{font-size:14px;font-weight:900;letter-spacing:.02em}
+.branden{font-size:7px;color:#777d82;letter-spacing:.22em;margin-top:4px}
+.nav{display:flex;gap:28px;align-items:center}
+.nav a{color:#8e9499;text-decoration:none;font-size:8px;letter-spacing:.18em}
+.nav a:hover{color:#fff}
+.mycart{height:42px;padding:0 18px;border:1px solid #ffffff20;background:#0d1012;color:#fff;font-size:9px;letter-spacing:.12em}
+.mycart b{display:inline-grid;place-items:center;min-width:22px;height:22px;margin-left:8px;border-radius:50%;background:var(--gold);color:#17130a;font-size:9px}
+.hero{min-height:660px;position:relative;overflow:hidden;border-bottom:1px solid var(--line);background:#070809}
+.hero:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,#070809 0%,#070809e8 38%,#07080935 63%,#0708098c 100%)}
+.heroImage{position:absolute;right:0;top:0;width:62%;height:100%;background:url("images/hero.jpg") center/cover no-repeat}
+.heroIn{position:relative;z-index:2;max-width:1500px;margin:auto;min-height:660px;padding:118px 38px 90px;display:flex;align-items:center}
+.heroCopy{width:48%;max-width:680px}
+.kicker{color:var(--gold2);font-size:9px;font-weight:900;letter-spacing:.28em}
+.hero h1{margin:13px 0 18px;font-size:clamp(70px,8vw,142px);line-height:.78;letter-spacing:-.065em;font-weight:900}
+.hero h1 .white{display:block;color:#f4f2ee}
+.hero h1 .gold{display:block;color:#e5c36f}
+.heroLead{font-size:12px;line-height:1.8;color:#c2c5c7;max-width:620px;margin:0 0 20px}
+.heroSub{font-size:9px;color:#777d82;line-height:1.7;max-width:650px}
+.heroActions{display:flex;gap:10px;margin-top:25px}
+.btn{min-height:46px;padding:0 22px;border:1px solid #d8b86699;background:transparent;color:#fff;font-size:9px;font-weight:900;letter-spacing:.1em}
+.btn.primary{background:var(--gold);color:#17130a}
+.btn:hover{filter:brightness(1.08)}
+.wrap{max-width:1500px;margin:auto;padding:42px 38px}
+.sectionHead{display:flex;align-items:end;justify-content:space-between;margin-bottom:18px}
+.sectionHead .eyebrow{font-size:8px;color:var(--gold);letter-spacing:.22em}
+.sectionHead h2{font-size:30px;margin:7px 0 0}
+.sectionNote{font-size:8px;color:#6f767b}
+.cats{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;border:1px solid var(--line);background:var(--line)}
+.cat{min-height:82px;border:0;background:#0c0f11;color:#858c91;text-align:left;padding:18px 20px}
+.cat.active{background:linear-gradient(135deg,#9d1b23,#521017);color:#fff}
+.cat b{display:block;font-size:13px}.cat small{display:block;margin-top:5px;font-size:7px;letter-spacing:.18em}
+.schedule{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);background:#0c0f11}
+.sb{padding:24px;border-right:1px solid var(--line)}.sb:last-child{border-right:0}
+.sb .t{font-size:7px;color:var(--gold);letter-spacing:.18em}.sb .big{font-size:22px;font-weight:900;margin-top:7px}.sb p{font-size:9px;color:#737a80;line-height:1.65;margin:7px 0 0}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.card{background:linear-gradient(#15191d,#0b0e10);border:1px solid var(--line);overflow:hidden}
+.pic{height:250px;position:relative;background:radial-gradient(circle at 50% 35%,#2a2f34,#090c0e 72%);overflow:hidden}
+.pic img{width:100%;height:100%;object-fit:cover;display:block}
+.pic .shade{position:absolute;inset:0;background:linear-gradient(180deg,transparent 48%,#030405bb)}
+.chosen{position:absolute;top:9px;left:9px;z-index:2;background:var(--gold);color:#17130a;padding:6px 8px;font-size:7px;font-weight:900}
+.body{padding:14px}.code{font-size:7px;color:var(--gold);letter-spacing:.16em}.body h3{font-size:15px;margin:6px 0 3px}.body p{font-size:8px;color:#72797e;margin:0}
+.sizeLabel{font-size:7px;color:#858c91;margin:11px 0 6px}.sizes{display:flex;flex-wrap:wrap;gap:5px}
+.size{min-width:31px;min-height:31px;padding:5px 7px;border:1px solid var(--line);background:#090c0e;color:#adb3b8;font-size:8px}
+.size.sel{background:var(--gold);color:#17130a;border-color:var(--gold);font-weight:900}
+.add{width:100%;margin-top:10px;min-height:40px;background:transparent;border:1px solid #d8b86655;color:#fff;font-size:8px;letter-spacing:.08em}
+.card.isChosen .add{background:#861a21;border-color:#a21d26}
+.custom{margin-top:22px;padding:20px;border:1px solid #d8b86640;background:linear-gradient(135deg,#0f1215,#211418)}
+.custom h3{margin:0;font-size:16px}.custom p{font-size:9px;color:#7e858a}.custom input{width:32%;margin:8px 5px 0 0;background:#080b0d;border:1px solid var(--line);padding:12px;color:#fff}.custom button{margin-top:8px}
+.cartbar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:#080a0bf5;border-top:1px solid var(--line);backdrop-filter:blur(16px);padding-bottom:var(--safe)}
+.cartin{max-width:1500px;margin:auto;padding:10px 38px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.cartText{font-size:9px;color:#8f969b}.cartText b{font-size:18px;color:#fff}.go{min-height:44px;padding:0 22px;background:var(--gold);border:0;color:#17130a;font-size:9px;font-weight:900}.go:disabled{opacity:.3}
+.modal{position:fixed;inset:0;z-index:100;background:#000d;display:grid;place-items:center;padding:16px}
+.mc{width:min(650px,100%);max-height:90vh;overflow:auto;background:#11151a;border:1px solid #d8b86666;padding:25px}
+.mc h3{margin:0;font-size:22px}.sub{font-size:9px;color:#81888d;margin-top:5px}.rows{margin:15px 0;border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);font-size:10px}.row select{background:#080b0d;color:#fff;border:1px solid var(--line);padding:8px}.del{background:none;border:0;color:#888;font-size:21px}
+.summary{padding:11px;background:#090c0f;border:1px solid var(--line);font-size:9px;color:#aab0b5}.mc label{display:block;font-size:8px;color:#969da2;margin:15px 0 6px}.mc input{width:100%;padding:13px;background:#080b0d;border:1px solid var(--line);color:#fff}.actions{display:flex;gap:8px;margin-top:14px}.actions button{flex:1}.ok{text-align:center}.ok .tick{font-size:50px;color:var(--gold)}
+footer{max-width:1500px;margin:auto;padding:60px 38px 100px;border-top:1px solid var(--line);font-size:8px;letter-spacing:.2em;color:#656c71}footer b{display:block;color:var(--gold);font-size:26px;margin:7px 0}
+@media(max-width:900px){
+ .top{height:66px}.topin{padding:0 14px}.logo{width:40px;height:40px}.brandcn{font-size:12px}.nav{display:none}.mycart{height:38px;padding:0 10px}
+ .hero{min-height:620px}.heroImage{width:100%;height:62%;top:0;opacity:.62}.hero:after{background:linear-gradient(180deg,#07080920 0%,#07080958 34%,#070809ee 70%,#070809 100%)}
+ .heroIn{min-height:620px;padding:300px 20px 45px;align-items:end}.heroCopy{width:100%}.kicker{font-size:7px}.hero h1{font-size:clamp(55px,15vw,90px);margin:10px 0 14px}.heroLead{font-size:10px}.heroSub{font-size:8px}.heroActions{margin-top:17px}
+ .wrap{padding:28px 14px}.cats{display:flex;overflow:auto;background:none;border:0;gap:6px}.cat{flex:0 0 105px;min-height:68px;border:1px solid var(--line);padding:13px}.cat b{font-size:11px}
+ .sectionHead h2{font-size:25px}.sectionNote{display:none}.schedule{grid-template-columns:1fr}.sb{border-right:0;border-bottom:1px solid var(--line);padding:17px}.sb:last-child{border-bottom:0}
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.pic{height:155px}.body{padding:10px}.body h3{font-size:13px}.custom input{width:100%;margin-right:0}
+ .cartin{padding:9px 12px}.mc{padding:18px 14px}
+ footer{padding:45px 14px 95px}
+}
+</style>
+</head>
 <body>
-<header class="top"><div class="topin"><div class="brand"><div class="mark">C</div><div><div class="cn">灣仔消防局 C隊</div><div class="en">WANCHAI FIRE STATION · C TEAM</div></div></div><nav class="nav"><a href="#collection">UNIFORM</a><a href="#schedule">INFORMATION</a><a href="#cart">MY CART</a></nav><div class="cartTop">CART <b id="topCount">0</b></div></div></header>
-<section class="hero"><div class="heroIn"><div class="heroTag">WANCHAI FIRE STATION / C TEAM</div><h1>UNIFORM<span>COLLECTION</span></h1><p>C隊制服訂購平台。手機優先設計，揀款式、揀尺碼、加入清單，再一次提交。</p><button class="heroBtn" onclick="document.getElementById('collection').scrollIntoView()">開始選制服 →</button></div></section>
-<main><div class="wrap"><div class="cats" id="cats"></div></div><section id="schedule" class="wrap"><div class="head"><div><div class="k">UNIFORM SCHEDULE</div><h2>制服更換安排</h2></div></div><div class="schedule"><div class="sb"><div class="t">CURRENT</div><div class="big" id="now"></div><p>現正可上網報制服；截止日期請留意隊內通知。</p></div><div class="sb"><div class="t">NEXT</div><div class="big" id="next"></div><p>下一次預計更換。</p></div><div class="sb"><div class="t">STANDARD</div><div class="big">ONE TEAM</div><p>有特別尺寸或項目，可使用自訂項目。</p></div></div></section><section id="collection" class="wrap"><div class="head"><div><div class="k">THE COLLECTION</div><h2 id="title">鞋類</h2></div><div class="note">手機版 · 兩欄快速選購</div></div><div class="grid" id="grid"></div><div class="custom"><h3>自訂項目 / 特別尺寸</h3><p>標準尺碼以外或有特別要求，可直接加入清單備註。</p><input id="customName" placeholder="項目名稱，例如：改短褲長"><input id="customSize" placeholder="尺寸 / 備註"><button class="btn primary" onclick="customAdd()">加入清單</button></div></section></main>
-<div id="cart" class="cartbar"><div class="cartin"><div class="cartText"><b id="count">0</b> 件制服已選<br><span id="hint">請先選擇制服</span></div><button id="review" class="go" onclick="openCart()" disabled>查看清單 →</button></div></div><footer>WANCHAI FIRE STATION<b>C TEAM</b><br><br>DISCIPLINE · UNITY · DUTY</footer>
+<header class="top">
+ <div class="topin">
+  <div class="brand">
+   <img class="logo" src="images/logo.jpg" alt="C隊">
+   <div><div class="brandcn">灣仔消防局 C隊</div><div class="branden">C TEAM · UNIFORM PORTAL</div></div>
+  </div>
+  <nav class="nav"><a href="#collection">UNIFORM</a><a href="#schedule">INFORMATION</a><a href="#cart">MY APPLICATION</a></nav>
+  <button class="mycart" onclick="openCart()">我的申領 <b id="topCount">0</b></button>
+ </div>
+</header>
+
+<section class="hero">
+ <div class="heroImage"></div>
+ <div class="heroIn">
+  <div class="heroCopy">
+   <div class="kicker">C TEAM · INTERNAL UNIFORM PORTAL</div>
+   <h1><span class="white">制服</span><span class="gold">申領平台</span></h1>
+   <p class="heroLead">選擇你今期需要嘅制服及個人裝備</p>
+   <p class="heroSub">完成選擇後提交申領資料，由 C隊統一整理，再於部門內辦網辦理申領。此平台只供 C隊內部使用。</p>
+   <div class="heroActions">
+    <button class="btn primary" onclick="document.getElementById('collection').scrollIntoView({behavior:'smooth'})">開始選擇</button>
+    <button class="btn" onclick="document.getElementById('schedule').scrollIntoView({behavior:'smooth'})">查看申領安排</button>
+   </div>
+  </div>
+ </div>
+</section>
+
+<main>
+ <section class="wrap" id="schedule">
+  <div class="sectionHead"><div><div class="eyebrow">UNIFORM SCHEDULE</div><h2>申領安排</h2></div><div class="sectionNote">WANCHAI FIRE STATION · C TEAM</div></div>
+  <div class="schedule">
+   <div class="sb"><div class="t">CURRENT</div><div class="big" id="now"></div><p>現正可上網申領制服；截止日期請留意隊內通知。</p></div>
+   <div class="sb"><div class="t">NEXT</div><div class="big" id="next"></div><p>下一次預計申領月份。</p></div>
+   <div class="sb"><div class="t">STANDARD</div><div class="big">ONE TEAM</div><p>有特別尺寸或項目，可使用自訂項目。</p></div>
+  </div>
+ </section>
+
+ <section class="wrap" id="collection">
+  <div class="sectionHead"><div><div class="eyebrow">THE COLLECTION</div><h2 id="title">上身</h2></div><div class="sectionNote">選擇款式 → 選擇尺碼 → 加入申領</div></div>
+  <div class="cats" id="cats"></div>
+  <div class="grid" id="grid" style="margin-top:18px"></div>
+  <div class="custom">
+   <h3>自訂項目 / 特別尺寸</h3>
+   <p>標準尺碼以外或有特別要求，可直接加入申領清單備註。</p>
+   <input id="customName" placeholder="項目名稱，例如：改短褲長">
+   <input id="customSize" placeholder="尺寸 / 備註">
+   <button class="btn primary" onclick="customAdd()">加入申領清單</button>
+  </div>
+ </section>
+</main>
+
+<div id="cart" class="cartbar">
+ <div class="cartin">
+  <div class="cartText"><b id="count">0</b> 件已選<br><span id="hint">請先選擇制服</span></div>
+  <button id="review" class="go" onclick="openCart()" disabled>查看申領 →</button>
+ </div>
+</div>
+
+<footer>WANCHAI FIRE STATION<b>C TEAM</b>DISCIPLINE · UNITY · DUTY</footer>
+
 <script>
 const API="https://script.google.com/macros/s/AKfycbz23oFPCxZ8bfzFsLbNY6IAHPIY_kYG32B6nsaOZRJFN5Gi0xRiMOwLKpKDtP-DyNtI7Q/exec";
+
 const P=[
 {id:'301',n:'紅色防水外套',cat:'上身',sizes:['S','M','L','XL','XXL'],img:'images/red-waterproof-jacket.jpg'},
 {id:'215',n:'長袖藍恤衫',cat:'上身',sizes:['S','M','L','XL','XXL'],img:'images/blue-long-shirt.jpg'},
@@ -43,12 +183,61 @@ const P=[
 {id:'412',n:'攀山手套',cat:'配件',sizes:['S','M','L','XL'],img:'images/cat_accessories.jpg'},
 {id:'57',n:'救火手套',cat:'配件',sizes:['S','M','L','XL'],img:'images/cat_accessories.jpg'}
 ];
-const cats=[['鞋類','FOOTWEAR'],['上身','TOPS'],['下身','BOTTOMS'],['運動服','SPORTSWEAR'],['配件','ACCESSORIES']];let cat='鞋類',cart=JSON.parse(localStorage.getItem('c_team_cart')||'[]'),sel={};
+
+const cats=[['上身','TOPS'],['下身','BOTTOMS'],['鞋類','FOOTWEAR'],['運動服','SPORTSWEAR'],['配件','ACCESSORIES']];
+let cat='上身',cart=JSON.parse(localStorage.getItem('c_team_cart')||'[]'),sel={};
+
 function save(){localStorage.setItem('c_team_cart',JSON.stringify(cart));render()}
-function render(){document.getElementById('cats').innerHTML=cats.map(c=>`<button class="cat ${cat===c[0]?'active':''}" onclick="cat='${c[0]}';render()"><b>${c[0]}</b><small>${c[1]}</small></button>`).join('');document.getElementById('title').textContent=cat;document.getElementById('grid').innerHTML=P.filter(p=>p.cat===cat).map(p=>{let x=cart.find(v=>v.id===p.id),s=x?.size||sel[p.id]||p.sizes[0];return `<article class="card ${x?'isChosen':''}"><div class="pic">${x?'<div class="chosen">✓ 已加入</div>':''}<img src="${p.img}" alt="${p.n}" loading="lazy"><div class="shade"></div></div><div class="body"><div class="code">ITEM ${p.id}</div><h3>${p.n}</h3><p>${p.cat}</p><div class="sizeLabel">選擇尺碼</div><div class="sizes">${p.sizes.map(z=>`<button class="size ${s===z?'sel':''}" onclick="sel['${p.id}']='${z}';render()">${z}</button>`).join('')}</div><button class="add" onclick="add('${p.id}')">${x?'✓ 已加入清單 · 更新尺碼':'＋ 加入清單'}</button></div></article>`}).join('');document.getElementById('count').textContent=cart.length;document.getElementById('topCount').textContent=cart.length;document.getElementById('review').disabled=!cart.length;document.getElementById('hint').textContent=cart.length?'可以查看及修改':'請先選擇制服'}
-function add(id){let p=P.find(x=>x.id===id),s=sel[id]||p.sizes[0];cart=cart.filter(x=>x.id!==id);cart.push({id,item:p.n,size:s});save();document.getElementById('cart').scrollIntoView({behavior:'smooth',block:'end'})}
-function customAdd(){let n=document.getElementById('customName').value.trim(),s=document.getElementById('customSize').value.trim();if(!n)return alert('請輸入項目名稱');cart.push({id:'CUSTOM-'+Date.now(),item:n,size:s||'備註'});document.getElementById('customName').value='';document.getElementById('customSize').value='';save();openCart()}
-function openCart(){if(!cart.length)return;let m=document.createElement('div');m.className='modal';m.id='modal';m.innerHTML=`<div class="mc"><h3>確認制服清單</h3><div class="sub">提交前可以修改尺碼或刪除項目。</div><div class="rows">${cart.map((x,i)=>{let p=P.find(y=>y.id===x.id),ss=p?p.sizes:[x.size];return `<div class="row"><span>${i+1}. ${x.item}</span><select onchange="cart[${i}].size=this.value;save();document.getElementById('modal')?.remove();openCart()">${ss.map(s=>`<option ${s===x.size?'selected':''}>${s}</option>`).join('')}</select><button class="del" onclick="cart.splice(${i},1);save();document.getElementById('modal')?.remove();if(cart.length)openCart()">×</button></div>`}).join('')}</div><div class="summary">共 <b>${cart.length}</b> 件 · 提交後直接寫入 C隊制服試算表</div><label>姓名</label><input id="name" value="${(localStorage.getItem('c_team_user_name')||'').replace(/"/g,'&quot;')}" placeholder="請輸入姓名"><div class="actions"><button class="btn" onclick="this.closest('.modal').remove()">繼續選擇</button><button class="btn primary" onclick="submitCart()">確認提交 ${cart.length} 件 →</button></div></div>`;document.body.appendChild(m)}
-async function submitCart(){let n=document.getElementById('name').value.trim();if(!n)return alert('請輸入姓名');let btn=document.querySelector('#modal .primary');btn.disabled=true;btn.textContent='正在提交…';localStorage.setItem('c_team_user_name',n);let ok=0;for(const x of cart){try{await fetch(API,{method:'POST',mode:'no-cors',body:new URLSearchParams({name:n,item:x.item,size:x.size})});ok++;await new Promise(r=>setTimeout(r,350))}catch(e){console.error(e)}}cart=[];localStorage.removeItem('c_team_cart');document.getElementById('modal')?.remove();render();let m=document.createElement('div');m.className='modal';m.innerHTML=`<div class="mc ok"><div class="tick">✓</div><h3>訂單已提交</h3><p class="sub">已送出 ${ok} 件制服。資料已傳送至 C隊制服試算表。</p><button class="btn primary" onclick="this.closest('.modal').remove()">完成</button></div>`;document.body.appendChild(m)}
-let mo=new Date().getMonth()+1;document.getElementById('now').textContent=mo+'月 · '+(mo%2?'單數月':'雙數月');document.getElementById('next').textContent=(mo===12?1:mo+1)+'月';render();
-</script></body></html>
+function render(){
+ document.getElementById('cats').innerHTML=cats.map(c=>`<button class="cat ${cat===c[0]?'active':''}" onclick="cat='${c[0]}';render()"><b>${c[0]}</b><small>${c[1]}</small></button>`).join('');
+ document.getElementById('title').textContent=cat;
+ document.getElementById('grid').innerHTML=P.filter(p=>p.cat===cat).map(p=>{
+  let x=cart.find(v=>v.id===p.id),s=x?.size||sel[p.id]||p.sizes[0];
+  return `<article class="card ${x?'isChosen':''}">
+   <div class="pic">${x?'<div class="chosen">✓ 已加入</div>':''}<img src="${p.img}" alt="${p.n}" loading="lazy"><div class="shade"></div></div>
+   <div class="body"><div class="code">ITEM ${p.id}</div><h3>${p.n}</h3><p>${p.cat}</p>
+   <div class="sizeLabel">選擇尺碼</div><div class="sizes">${p.sizes.map(z=>`<button class="size ${s===z?'sel':''}" onclick="sel['${p.id}']='${z}';render()">${z}</button>`).join('')}</div>
+   <button class="add" onclick="add('${p.id}')">${x?'✓ 已加入清單 · 更新尺碼':'＋ 加入清單'}</button></div>
+  </article>`
+ }).join('');
+ document.getElementById('count').textContent=cart.length;
+ document.getElementById('topCount').textContent=cart.length;
+ document.getElementById('review').disabled=!cart.length;
+ document.getElementById('hint').textContent=cart.length?'可以查看及修改':'請先選擇制服';
+}
+function add(id){
+ let p=P.find(x=>x.id===id),s=sel[id]||p.sizes[0];
+ cart=cart.filter(x=>x.id!==id);cart.push({id,item:p.n,size:s});save();
+}
+function customAdd(){
+ let n=document.getElementById('customName').value.trim(),s=document.getElementById('customSize').value.trim();
+ if(!n)return alert('請輸入項目名稱');
+ cart.push({id:'CUSTOM-'+Date.now(),item:n,size:s||'備註'});
+ document.getElementById('customName').value='';document.getElementById('customSize').value='';save();openCart();
+}
+function openCart(){
+ if(!cart.length)return;
+ let m=document.createElement('div');m.className='modal';m.id='modal';
+ m.innerHTML=`<div class="mc"><h3>確認申領清單</h3><div class="sub">提交前可以修改尺碼或刪除項目。</div>
+ <div class="rows">${cart.map((x,i)=>{let p=P.find(y=>y.id===x.id),ss=p?p.sizes:[x.size];
+ return `<div class="row"><span>${i+1}. ${x.item}</span><select onchange="cart[${i}].size=this.value;save();document.getElementById('modal')?.remove();openCart()">${ss.map(s=>`<option ${s===x.size?'selected':''}>${s}</option>`).join('')}</select><button class="del" onclick="cart.splice(${i},1);save();document.getElementById('modal')?.remove();if(cart.length)openCart()">×</button></div>`}).join('')}</div>
+ <div class="summary">共 <b>${cart.length}</b> 件 · 提交後直接寫入 C隊制服試算表</div>
+ <label>姓名</label><input id="name" value="${(localStorage.getItem('c_team_user_name')||'').replace(/"/g,'&quot;')}" placeholder="請輸入姓名">
+ <div class="actions"><button class="btn" onclick="this.closest('.modal').remove()">繼續選擇</button><button class="btn primary" onclick="submitCart()">確認提交 ${cart.length} 件 →</button></div></div>`;
+ document.body.appendChild(m);
+}
+async function submitCart(){
+ let n=document.getElementById('name').value.trim();if(!n)return alert('請輸入姓名');
+ let btn=document.querySelector('#modal .primary');btn.disabled=true;btn.textContent='正在提交…';
+ localStorage.setItem('c_team_user_name',n);let ok=0;
+ for(const x of cart){try{await fetch(API,{method:'POST',mode:'no-cors',body:new URLSearchParams({name:n,item:x.item,size:x.size})});ok++;await new Promise(r=>setTimeout(r,350))}catch(e){console.error(e)}}
+ cart=[];localStorage.removeItem('c_team_cart');document.getElementById('modal')?.remove();render();
+ let m=document.createElement('div');m.className='modal';m.innerHTML=`<div class="mc ok"><div class="tick">✓</div><h3>申領已提交</h3><p class="sub">已送出 ${ok} 件制服。資料已傳送至 C隊制服試算表。</p><button class="btn primary" onclick="this.closest('.modal').remove()">完成</button></div>`;document.body.appendChild(m);
+}
+let mo=new Date().getMonth()+1;
+document.getElementById('now').textContent=mo+'月 · '+(mo%2?'單數月':'雙數月');
+document.getElementById('next').textContent=(mo===12?1:mo+1)+'月';
+render();
+</script>
+</body>
+</html>
