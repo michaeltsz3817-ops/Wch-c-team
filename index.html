@@ -184,7 +184,7 @@ const P=[
 {id:'57',n:'救火手套',cat:'配件',sizes:['S','M','L','XL'],img:'images/cat_accessories.jpg'}
 ];
 
-const cats=[['上身','TOPS'],['下身','BOTTOMS'],['鞋類','FOOTWEAR'],['運動服','SPORTSWEAR'],['配件','ACCESSORIES']];
+const cats=[['上身','TOPS'],['下身','BOTTOMS'],['鞋類','FOOTWEAR'],['配件','ACCESSORIES']];
 let cat='上身',cart=JSON.parse(localStorage.getItem('c_team_cart')||'[]'),sel={};
 
 function save(){localStorage.setItem('c_team_cart',JSON.stringify(cart));render()}
