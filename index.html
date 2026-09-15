@@ -13,28 +13,36 @@
 <script>
 const API="https://script.google.com/macros/s/AKfycbz23oFPCxZ8bfzFsLbNY6IAHPIY_kYG32B6nsaOZRJFN5Gi0xRiMOwLKpKDtP-DyNtI7Q/exec";
 const P=[
-{id:'208',n:'跑步鞋',cat:'鞋類',sizes:['6','7','8','9'],img:'images/prod1.jpg'},
-{id:'207',n:'白色帆布鞋',cat:'鞋類',sizes:['6','7','8','9'],img:'images/cat_footwear.jpg'},
-{id:'216',n:'黑色膠鞋 O/R',cat:'鞋類',sizes:['5','6','7','8'],img:'images/cat_footwear.jpg'},
-{id:'32',n:'安全工作鞋',cat:'鞋類',sizes:['6','7','8','9'],img:'images/cat_footwear.jpg'},
-{id:'7',n:'Firetred',cat:'鞋類',sizes:['6','7','8','9'],img:'images/cat_footwear.jpg'},
 {id:'301',n:'紅色防水外套',cat:'上身',sizes:['S','M','L','XL','XXL'],img:'images/red-waterproof-jacket.jpg'},
 {id:'215',n:'長袖藍恤衫',cat:'上身',sizes:['S','M','L','XL','XXL'],img:'images/blue-long-shirt.jpg'},
-{id:'256',n:'Working T-shirt',cat:'上身',sizes:['S','M','L','XL'],img:'images/prod2.jpg'},
-{id:'220',n:'短袖藍恤',cat:'上身',sizes:['S','M','L','XL'],img:'images/cat_tops.jpg'},
-{id:'258',n:'藍色長褲',cat:'下身',sizes:['S','M','L','XL'],img:'images/prod3.jpg'},
-{id:'247',n:'藍色 P.T. 短褲',cat:'下身',sizes:['S','M','L','XL'],img:'images/cat_bottoms.jpg'},
-{id:'275',n:'藍色 P.T. 背心',cat:'運動服',sizes:['S','M','L','XL'],img:'images/cat_sportswear.jpg'},
-{id:'245',n:'冬季 P.T. 上衣',cat:'運動服',sizes:['S','M','L','XL'],img:'images/cat_sportswear.jpg'},
-{id:'401',n:'三級布膊（藍）',cat:'配件',sizes:['STD'],img:'images/epaulette-blue.jpg'},
+{id:'256',n:'汗衣',cat:'上身',sizes:['S','M','L','XL'],img:'images/prod2.jpg'},
+{id:'245',n:'長袖運動衫',cat:'上身',sizes:['S','M','L','XL'],img:'images/cat_sportswear.jpg'},
+{id:'220',n:'短袖運動衫',cat:'上身',sizes:['S','M','L','XL'],img:'images/cat_tops.jpg'},
+{id:'275',n:'背心',cat:'上身',sizes:['S','M','L','XL'],img:'images/cat_sportswear.jpg'},
+
+{id:'258',n:'藍扯褲',cat:'下身',sizes:['S','M','L','XL'],img:'images/prod3.jpg'},
+{id:'247',n:'運動褲',cat:'下身',sizes:['S','M','L','XL'],img:'images/cat_bottoms.jpg'},
+{id:'259',n:'紅色防水褲',cat:'下身',sizes:['S','M','L','XL','XXL'],img:'images/cat_bottoms.jpg'},
+
+{id:'216',n:'水鞋',cat:'鞋類',sizes:['5','6','7','8'],img:'images/cat_footwear.jpg'},
+{id:'32',n:'多功能鞋',cat:'鞋類',sizes:['6','7','8','9'],img:'images/cat_footwear.jpg'},
+{id:'7',n:'皮鞋',cat:'鞋類',sizes:['6','7','8','9'],img:'images/cat_footwear.jpg'},
+{id:'208',n:'運動鞋',cat:'鞋類',sizes:['6','7','8','9'],img:'images/prod1.jpg'},
+
+{id:'401',n:'三級布膊',cat:'配件',sizes:['STD'],img:'images/epaulette-blue.jpg'},
+{id:'404',n:'三級防水布膊',cat:'配件',sizes:['STD'],img:'images/red-waterproof-jacket.jpg'},
+{id:'405',n:'三級布膊（一柴）',cat:'配件',sizes:['STD'],img:'images/epaulette-blue.jpg'},
+{id:'406',n:'三級防水布膊（一柴）',cat:'配件',sizes:['STD'],img:'images/red-waterproof-jacket.jpg'},
+{id:'407',n:'三級布膊（沙展）',cat:'配件',sizes:['STD'],img:'images/epaulette-blue.jpg'},
+{id:'408',n:'三級防水布膊（沙展）',cat:'配件',sizes:['STD'],img:'images/red-waterproof-jacket.jpg'},
+{id:'409',n:'三級布膊（老總）',cat:'配件',sizes:['STD'],img:'images/epaulette-blue.jpg'},
+{id:'410',n:'三級防水布膊（老總）',cat:'配件',sizes:['STD'],img:'images/red-waterproof-jacket.jpg'},
 {id:'402',n:'鴨咀帽',cat:'配件',sizes:['STD'],img:'images/cap.jpg'},
-{id:'403',n:'防水三級布膊（紅）',cat:'配件',sizes:['STD'],img:'images/red-waterproof-jacket.jpg'},
-{id:'28',n:'Personal Equipment Bag',cat:'配件',sizes:['STD'],img:'images/cat_accessories.jpg'},
-{id:'10',n:'Green Tool Bag',cat:'配件',sizes:['STD'],img:'images/cat_accessories.jpg'},
-{id:'88',n:'布章',cat:'配件',sizes:['STD'],img:'images/logo.jpg'},
-{id:'180',n:'防水布章',cat:'配件',sizes:['STD'],img:'images/logo.jpg'},
-{id:'30',n:'Cap',cat:'配件',sizes:['S','M','L','XL'],img:'images/cap.jpg'},
-{id:'57',n:'防火手套',cat:'配件',sizes:['S','M','L','XL'],img:'images/cat_accessories.jpg'}];
+{id:'411',n:'頂更袋',cat:'配件',sizes:['STD'],img:'images/cat_accessories.jpg'},
+{id:'28',n:'藍色裝備袋',cat:'配件',sizes:['STD'],img:'images/cat_accessories.jpg'},
+{id:'412',n:'攀山手套',cat:'配件',sizes:['S','M','L','XL'],img:'images/cat_accessories.jpg'},
+{id:'57',n:'救火手套',cat:'配件',sizes:['S','M','L','XL'],img:'images/cat_accessories.jpg'}
+];
 const cats=[['鞋類','FOOTWEAR'],['上身','TOPS'],['下身','BOTTOMS'],['運動服','SPORTSWEAR'],['配件','ACCESSORIES']];let cat='鞋類',cart=JSON.parse(localStorage.getItem('c_team_cart')||'[]'),sel={};
 function save(){localStorage.setItem('c_team_cart',JSON.stringify(cart));render()}
 function render(){document.getElementById('cats').innerHTML=cats.map(c=>`<button class="cat ${cat===c[0]?'active':''}" onclick="cat='${c[0]}';render()"><b>${c[0]}</b><small>${c[1]}</small></button>`).join('');document.getElementById('title').textContent=cat;document.getElementById('grid').innerHTML=P.filter(p=>p.cat===cat).map(p=>{let x=cart.find(v=>v.id===p.id),s=x?.size||sel[p.id]||p.sizes[0];return `<article class="card ${x?'isChosen':''}"><div class="pic">${x?'<div class="chosen">✓ 已加入</div>':''}<img src="${p.img}" alt="${p.n}" loading="lazy"><div class="shade"></div></div><div class="body"><div class="code">ITEM ${p.id}</div><h3>${p.n}</h3><p>${p.cat}</p><div class="sizeLabel">選擇尺碼</div><div class="sizes">${p.sizes.map(z=>`<button class="size ${s===z?'sel':''}" onclick="sel['${p.id}']='${z}';render()">${z}</button>`).join('')}</div><button class="add" onclick="add('${p.id}')">${x?'✓ 已加入清單 · 更新尺碼':'＋ 加入清單'}</button></div></article>`}).join('');document.getElementById('count').textContent=cart.length;document.getElementById('topCount').textContent=cart.length;document.getElementById('review').disabled=!cart.length;document.getElementById('hint').textContent=cart.length?'可以查看及修改':'請先選擇制服'}
