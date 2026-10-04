@@ -63,6 +63,10 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
 .sizeLabel{font-size:7px;color:#858c91;margin:11px 0 6px}.sizes{display:flex;flex-wrap:wrap;gap:5px}
 .size{min-width:31px;min-height:31px;padding:5px 7px;border:1px solid var(--line);background:#090c0e;color:#adb3b8;font-size:8px}
 .size.sel{background:var(--gold);color:#17130a;border-color:var(--gold);font-weight:900}
+.search{width:100%;margin:0 0 14px;padding:13px 14px;background:#090c0e;border:1px solid var(--line);color:#fff;font-size:10px}
+.qty{display:flex;align-items:center;gap:8px;margin-top:11px}.qty button{width:30px;height:30px;border:1px solid var(--line);background:#090c0e;color:#fff;font-size:16px}.qty b{min-width:18px;text-align:center;font-size:11px}
+.extra{width:100%;margin-top:8px;padding:10px;background:#090c0e;border:1px solid var(--line);color:#fff;font-size:9px}
+.groupTitle{grid-column:1/-1;padding:12px 2px 0;color:var(--gold);font-size:10px;letter-spacing:.12em;border-top:1px solid var(--line)}
 .add{width:100%;margin-top:10px;min-height:40px;background:transparent;border:1px solid #d8b86655;color:#fff;font-size:8px;letter-spacing:.08em}
 .card.isChosen .add{background:#861a21;border-color:#a21d26}
 .custom{margin-top:22px;padding:20px;border:1px solid #d8b86640;background:linear-gradient(135deg,#0f1215,#211418)}
@@ -129,6 +133,7 @@ footer{max-width:1500px;margin:auto;padding:60px 38px 100px;border-top:1px solid
  <section class="wrap" id="collection">
   <div class="sectionHead"><div><div class="eyebrow">THE COLLECTION</div><h2 id="title">上身</h2></div><div class="sectionNote">選擇款式 → 選擇尺碼 → 加入申領</div></div>
   <div class="cats" id="cats"></div>
+  <input id="search" class="search" type="search" placeholder="搜尋產品，例如：鞋、外套、手套、布膊" oninput="query=this.value.trim();render()">
   <div class="grid" id="grid" style="margin-top:18px"></div>
   <div class="custom">
    <h3>自訂項目 / 特別尺寸</h3>
@@ -185,34 +190,42 @@ const P=[
 ];
 
 const cats=[['上身','TOPS'],['下身','BOTTOMS'],['鞋類','FOOTWEAR'],['配件','ACCESSORIES']];
-let cat='上身',cart=JSON.parse(localStorage.getItem('c_team_cart')||'[]'),sel={};
+let cat='上身',query='',cart=JSON.parse(localStorage.getItem('c_team_cart')||'[]'),sel={},extraSel={};
 
 function save(){localStorage.setItem('c_team_cart',JSON.stringify(cart));render()}
+function totalCount(){return cart.reduce((a,x)=>a+(x.quantity||1),0)}
 function render(){
  document.getElementById('cats').innerHTML=cats.map(c=>`<button class="cat ${cat===c[0]?'active':''}" onclick="cat='${c[0]}';render()"><b>${c[0]}</b><small>${c[1]}</small></button>`).join('');
- document.getElementById('title').textContent=cat;
- document.getElementById('grid').innerHTML=P.filter(p=>p.cat===cat).map(p=>{
-  let x=cart.find(v=>v.id===p.id),s=x?.size||sel[p.id]||p.sizes[0];
+ document.getElementById('title').textContent=query?'搜尋結果':cat;
+ let products=P.filter(p=>(query?(p.n+' '+p.cat).includes(query):p.cat===cat));
+ document.getElementById('grid').innerHTML=products.map((p,index)=>{
+  let x=cart.find(v=>v.id===p.id),s=x?.size||sel[p.id]||p.sizes[0],q=x?.quantity||1,extra=x?.extraSize??extraSel[p.id]??'';
+  let group=cat==='配件'?(index<8?'三級布膊':'其他配件'):'';
   return `<article class="card ${x?'isChosen':''}">
+   ${group && (index===0 || (index===8 && products[index-1]?.cat===p.cat))?`<div class="groupTitle">${group}</div>`:''}
    <div class="pic">${x?'<div class="chosen">✓ 已加入</div>':''}<img src="${p.img}" alt="${p.n}" loading="lazy"><div class="shade"></div></div>
    <div class="body"><div class="code">ITEM ${p.id}</div><h3>${p.n}</h3><p>${p.cat}</p>
    <div class="sizeLabel">選擇尺碼</div><div class="sizes">${p.sizes.map(z=>`<button class="size ${s===z?'sel':''}" onclick="sel['${p.id}']='${z}';render()">${z}</button>`).join('')}</div>
+   <input class="extra" id="extra-${p.id}" value="${extra.replace(/&/g,'&amp;').replace(/"/g,'&quot;')}" placeholder="其他尺碼 / 特別尺寸（可留空）" oninput="setExtra('${p.id}',this.value)">
+   <div class="qty"><span class="sizeLabel">數量</span><button onclick="changeQty('${p.id}',-1)">−</button><b>${q}</b><button onclick="changeQty('${p.id}',1)">＋</button></div>
    <button class="add" onclick="add('${p.id}')">${x?'✓ 已加入清單 · 更新尺碼':'＋ 加入清單'}</button></div>
   </article>`
  }).join('');
- document.getElementById('count').textContent=cart.length;
- document.getElementById('topCount').textContent=cart.length;
+ document.getElementById('count').textContent=totalCount();
+ document.getElementById('topCount').textContent=totalCount();
  document.getElementById('review').disabled=!cart.length;
  document.getElementById('hint').textContent=cart.length?'可以查看及修改':'請先選擇制服';
 }
 function add(id){
- let p=P.find(x=>x.id===id),s=sel[id]||p.sizes[0];
- cart=cart.filter(x=>x.id!==id);cart.push({id,item:p.n,size:s});save();
+ let p=P.find(x=>x.id===id),old=cart.find(x=>x.id===id),s=sel[id]||old?.size||p.sizes[0];
+ cart=cart.filter(x=>x.id!==id);cart.push({id,item:p.n,size:s,extraSize:old?.extraSize??extraSel[id]??'',quantity:old?.quantity||1});save();
 }
+function setExtra(id,value){extraSel[id]=value;let x=cart.find(v=>v.id===id);if(x){x.extraSize=value;localStorage.setItem('c_team_cart',JSON.stringify(cart))}}
+function changeQty(id,delta){let x=cart.find(v=>v.id===id);if(!x){let p=P.find(v=>v.id===id);x={id,item:p.n,size:sel[id]||p.sizes[0],extraSize:'',quantity:1};cart.push(x)}x.quantity=Math.max(0,(x.quantity||1)+delta);if(!x.quantity)cart=cart.filter(v=>v.id!==id);save()}
 function customAdd(){
  let n=document.getElementById('customName').value.trim(),s=document.getElementById('customSize').value.trim();
  if(!n)return alert('請輸入項目名稱');
- cart.push({id:'CUSTOM-'+Date.now(),item:n,size:s||'備註'});
+ cart.push({id:'CUSTOM-'+Date.now(),item:n,size:s||'備註',extraSize:'',quantity:1});
  document.getElementById('customName').value='';document.getElementById('customSize').value='';save();openCart();
 }
 function openCart(){
@@ -220,17 +233,17 @@ function openCart(){
  let m=document.createElement('div');m.className='modal';m.id='modal';
  m.innerHTML=`<div class="mc"><h3>確認申領清單</h3><div class="sub">提交前可以修改尺碼或刪除項目。</div>
  <div class="rows">${cart.map((x,i)=>{let p=P.find(y=>y.id===x.id),ss=p?p.sizes:[x.size];
- return `<div class="row"><span>${i+1}. ${x.item}</span><select onchange="cart[${i}].size=this.value;save();document.getElementById('modal')?.remove();openCart()">${ss.map(s=>`<option ${s===x.size?'selected':''}>${s}</option>`).join('')}</select><button class="del" onclick="cart.splice(${i},1);save();document.getElementById('modal')?.remove();if(cart.length)openCart()">×</button></div>`}).join('')}</div>
- <div class="summary">共 <b>${cart.length}</b> 件 · 提交後直接寫入 C隊制服試算表</div>
+ return `<div class="row"><span>${i+1}. ${x.item}<br><small>數量 ${x.quantity||1}${x.extraSize?' · '+x.extraSize:''}</small></span><select onchange="cart[${i}].size=this.value;save();document.getElementById('modal')?.remove();openCart()">${ss.map(s=>`<option ${s===x.size?'selected':''}>${s}</option>`).join('')}</select><button class="del" onclick="cart.splice(${i},1);save();document.getElementById('modal')?.remove();if(cart.length)openCart()">×</button></div>`}).join('')}</div>
+ <div class="summary">共 <b>${cart.reduce((a,x)=>a+(x.quantity||1),0)}</b> 件 · 提交後直接寫入 C隊制服試算表</div>
  <label>姓名</label><input id="name" value="${(localStorage.getItem('c_team_user_name')||'').replace(/"/g,'&quot;')}" placeholder="請輸入姓名">
- <div class="actions"><button class="btn" onclick="this.closest('.modal').remove()">繼續選擇</button><button class="btn primary" onclick="submitCart()">確認提交 ${cart.length} 件 →</button></div></div>`;
+ <div class="actions"><button class="btn" onclick="this.closest('.modal').remove()">繼續選擇</button><button class="btn primary" onclick="submitCart()">確認提交 ${totalCount()} 件 →</button></div></div>`;
  document.body.appendChild(m);
 }
 async function submitCart(){
  let n=document.getElementById('name').value.trim();if(!n)return alert('請輸入姓名');
  let btn=document.querySelector('#modal .primary');btn.disabled=true;btn.textContent='正在提交…';
  localStorage.setItem('c_team_user_name',n);let ok=0;
- for(const x of cart){try{await fetch(API,{method:'POST',mode:'no-cors',body:new URLSearchParams({name:n,item:x.item,size:x.size})});ok++;await new Promise(r=>setTimeout(r,350))}catch(e){console.error(e)}}
+ for(const x of cart){try{await fetch(API,{method:'POST',mode:'no-cors',body:new URLSearchParams({name:n,item:x.item,size:x.size,extraSize:x.extraSize||'',quantity:String(x.quantity||1)})});ok+=(x.quantity||1);await new Promise(r=>setTimeout(r,350))}catch(e){console.error(e)}}
  cart=[];localStorage.removeItem('c_team_cart');document.getElementById('modal')?.remove();render();
  let m=document.createElement('div');m.className='modal';m.innerHTML=`<div class="mc ok"><div class="tick">✓</div><h3>申領已提交</h3><p class="sub">已送出 ${ok} 件制服。資料已傳送至 C隊制服試算表。</p><button class="btn primary" onclick="this.closest('.modal').remove()">完成</button></div>`;document.body.appendChild(m);
 }
