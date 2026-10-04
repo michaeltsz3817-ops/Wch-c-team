@@ -125,9 +125,9 @@ footer{max-width:1500px;margin:auto;padding:60px 38px 100px;border-top:1px solid
  <section class="wrap" id="schedule">
   <div class="sectionHead"><div><div class="eyebrow">UNIFORM SCHEDULE</div><h2>申領安排</h2></div><div class="sectionNote">WANCHAI FIRE STATION · C TEAM</div></div>
   <div class="schedule">
-   <div class="sb"><div class="t">CURRENT</div><div class="big" id="now"></div><p>現正可上網申領制服；截止日期請留意隊內通知。</p></div>
-   <div class="sb"><div class="t">NEXT</div><div class="big" id="next"></div><p>下一次預計申領月份。</p></div>
-   <div class="sb"><div class="t">STANDARD</div><div class="big">ONE TEAM</div><p>有特別尺寸或項目，可使用自訂項目。</p></div>
+   <div class="sb"><div class="t">雙數月份</div><div class="big">網上申請</div><p>2、4、6、8、10、12月可於網站提交制服申請。</p></div>
+   <div class="sb"><div class="t">單數月份</div><div class="big">到消防局領取</div><p>1、3、5、7、9、11月到灣仔消防局領取已申請制服。</p></div>
+   <div class="sb"><div class="t">申領流程</div><div class="big">申請 → 領取</div><p>先於雙數月份網上申請，再於下一個單數月份到消防局領取。</p></div>
   </div>
  </section>
 
@@ -248,9 +248,6 @@ async function submitCart(){
  cart=[];localStorage.removeItem('c_team_cart');document.getElementById('modal')?.remove();render();
  let m=document.createElement('div');m.className='modal';m.innerHTML=`<div class="mc ok"><div class="tick">✓</div><h3>申領已提交</h3><p class="sub">已送出 ${ok} 件制服。資料已傳送至 C隊制服試算表。</p><button class="btn primary" onclick="this.closest('.modal').remove()">完成</button></div>`;document.body.appendChild(m);
 }
-let mo=new Date().getMonth()+1;
-document.getElementById('now').textContent=mo+'月 · '+(mo%2?'單數月':'雙數月');
-document.getElementById('next').textContent=(mo===12?1:mo+1)+'月';
 render();
 </script>
 </body>
